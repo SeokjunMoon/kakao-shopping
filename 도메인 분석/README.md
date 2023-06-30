@@ -62,7 +62,17 @@
 
 가 필요합니다. product_id는 해당 옵션이 속한 상품의 정보를 가리키기 위해 필요합니다. 그리고 옵션 밑에 보면, 배송비 정보가 있습니다. 무료 배송인지, 추가 배송비가 필요한지, 필요한 배송비의 정보를 저장하기 위해서 상품 테이블에 추가적인 필드가 필요합니다. 따라서 `product_tb` 에 delivery_price : int 필드를 추가합니다. 
 
-그리고 상품의 정보 조회를 위한 `/products/{id}` API가 필요합니다. 
+상품의 정보 조회를 위한 `/products/{id}` API가 필요합니다. 
+
+또한, 해당 상품의 리뷰와 판매자의 정보를 확인할 수 있는 기능이 없습니다. 이를 추가하기 위해서는, 리뷰 테이블이 필요합니다. 그리고 `product_tb` 에서 판매자의 유저 아이디를 저장할 필드도 필요합니다. 리뷰 테이블의 필드는
+
+1. id : int
+2. product_id : int
+3. contents : string
+4. star_count : int
+5. image : string
+
+의 정보가 필요합니다. 리뷰 내용과 사진, 별점의 정보가 필요하고 어떤 상품의 리뷰인지를 구분하기 위한 product_id 필드도 필요합니다.
 
 </br>
 
@@ -135,10 +145,11 @@ DROP TABLE IF EXISTS cart_tb;
 CREATE TABLE user_tb
 (
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
-    email    TEXT NOT NULL,
-    password TEXT NOT NULL,
-    roles    TEXT NOT NULL,
-    username TEXT NOT NULL,
+    email    TEXT    NOT NULL,
+    password TEXT    NOT NULL,
+    roles    TEXT    NOT NULL,
+    username TEXT    NOT NULL,
+    created  DATETIME NOT NULL,
     UNIQUE (email)
 );
 
@@ -148,7 +159,8 @@ CREATE TABLE product_tb
     description  TEXT    NOT NULL,
     image        TEXT    NOT NULL,
     price        INTEGER NOT NULL,
-    product_name TEXT    NOT NULL
+    product_name TEXT    NOT NULL,
+    created      DATETIME NOT NULL
 );
 
 CREATE TABLE option_tb
@@ -157,6 +169,7 @@ CREATE TABLE option_tb
     option_name TEXT    NOT NULL,
     price       INTEGER NOT NULL,
     product_id  INTEGER,
+    created     DATETIME NOT NULL
     CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES product_tb
 );
 
@@ -167,6 +180,7 @@ CREATE TABLE cart_tb
     quantity  INTEGER NOT NULL,
     user_id   INTEGER,
     option_id INTEGER,
+    created   DATETIME NOT NULL
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_tb,
     CONSTRAINT option_id_fk FOREIGN KEY (option_id) REFERENCES option_tb,
     UNIQUE (user_id, option_id)
@@ -174,8 +188,9 @@ CREATE TABLE cart_tb
 
 CREATE TABLE order_tb
 (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
+    created DATETIME NOT NULL
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_tb
 );
 
@@ -186,6 +201,7 @@ CREATE TABLE item_tb
     quantity  INTEGER NOT NULL,
     option_id INTEGER,
     order_id  INTEGER,
+    created   DATETIME NOT NULL
     CONSTRAINT option_id_fk FOREIGN KEY (option_id) REFERENCES option_tb,
     CONSTRAINT order_id_fk FOREIGN KEY (order_id) REFERENCES order_tb
 );
