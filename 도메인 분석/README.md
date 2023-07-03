@@ -169,7 +169,7 @@ CREATE TABLE option_tb
     option_name TEXT    NOT NULL,
     price       INTEGER NOT NULL,
     product_id  INTEGER,
-    created     DATETIME NOT NULL
+    created     DATETIME NOT NULL,
     CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES product_tb
 );
 
@@ -180,7 +180,7 @@ CREATE TABLE cart_tb
     quantity  INTEGER NOT NULL,
     user_id   INTEGER,
     option_id INTEGER,
-    created   DATETIME NOT NULL
+    created   DATETIME NOT NULL,
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_tb,
     CONSTRAINT option_id_fk FOREIGN KEY (option_id) REFERENCES option_tb,
     UNIQUE (user_id, option_id)
@@ -190,7 +190,7 @@ CREATE TABLE order_tb
 (
     id      INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
-    created DATETIME NOT NULL
+    created DATETIME NOT NULL,
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user_tb
 );
 
@@ -201,7 +201,7 @@ CREATE TABLE item_tb
     quantity  INTEGER NOT NULL,
     option_id INTEGER,
     order_id  INTEGER,
-    created   DATETIME NOT NULL
+    created   DATETIME NOT NULL,
     CONSTRAINT option_id_fk FOREIGN KEY (option_id) REFERENCES option_tb,
     CONSTRAINT order_id_fk FOREIGN KEY (order_id) REFERENCES order_tb
 );
