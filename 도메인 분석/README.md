@@ -159,7 +159,7 @@ CREATE TABLE product_tb
     description  TEXT    NOT NULL,
     image        TEXT    NOT NULL,
     price        INTEGER NOT NULL,
-    product_name TEXT    NOT NULL,
+    name         TEXT    NOT NULL,
     created      DATETIME NOT NULL
 );
 
