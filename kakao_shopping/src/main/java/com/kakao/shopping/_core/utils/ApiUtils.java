@@ -1,4 +1,4 @@
-package com.example.kakao_shopping._core.utils;
+package com.kakao.shopping._core.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ public class ApiUtils {
     public static class ApiResult<T> {
         final private boolean success;
         final private T response;
-        final private ApiError<T> error;
+        final private ApiError error;
     }
 
     @Getter

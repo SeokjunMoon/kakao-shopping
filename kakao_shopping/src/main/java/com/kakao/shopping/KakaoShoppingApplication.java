@@ -1,4 +1,4 @@
-package com.kakao.shopping.kakao_shopping;
+package com.kakao.shopping;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
