@@ -82,4 +82,32 @@ public class ProductRestControllerTest {
         resultActions.andExpect(jsonPath("$.response[8].image").value("/images/9.jpg"));
         resultActions.andExpect(jsonPath("$.response[8].price").value(797000));
     }
+
+    @Test
+    public void findByIdTest() throws Exception {
+        int id = 1;
+
+        ResultActions resultActions = mockMvc.perform(
+                get("/products/" + id)
+        );
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        resultActions.andExpect(jsonPath("$.success").value("true"));
+
+        resultActions.andExpect(jsonPath("$.response.id").value(1));
+        resultActions.andExpect(jsonPath("$.response.name").value("기본에 슬라이딩 지퍼백 크리스마스/플라워에디션 에디션 외 주방용품 특가전"));
+        resultActions.andExpect(jsonPath("$.response.description").value(""));
+        resultActions.andExpect(jsonPath("$.response.image").value("/images/1.jpg"));
+        resultActions.andExpect(jsonPath("$.response.price").value(1000));
+
+        resultActions.andExpect(jsonPath("$.response.options[0].id").value(1));
+        resultActions.andExpect(jsonPath("$.response.options[0].name").value("01. 슬라이딩 지퍼백 크리스마스에디션 4종"));
+        resultActions.andExpect(jsonPath("$.response.options[0].price").value(10000));
+
+        resultActions.andExpect(jsonPath("$.response.options[1].id").value(2));
+        resultActions.andExpect(jsonPath("$.response.options[1].name").value("02. 슬라이딩 지퍼백 플라워에디션 5종"));
+        resultActions.andExpect(jsonPath("$.response.options[1].price").value(10900));
+    }
 }
