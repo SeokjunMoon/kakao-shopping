@@ -1,4 +1,4 @@
-package com.kakao.shopping.products.dto;
+package com.kakao.shopping.domain.product.dto;
 
 import lombok.Builder;
 import lombok.Getter;

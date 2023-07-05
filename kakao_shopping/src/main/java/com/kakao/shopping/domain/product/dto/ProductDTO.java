@@ -1,13 +1,12 @@
-package com.kakao.shopping.products.dto;
+package com.kakao.shopping.domain.product.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-public class ProductResponseFindByIdDTO {
+public class ProductDTO {
     final private int id;
     final private String name;
     final private String description;
@@ -17,7 +16,7 @@ public class ProductResponseFindByIdDTO {
     final private List<ProductOptionDTO> options;
 
     @Builder
-    public ProductResponseFindByIdDTO(int id, String name, String description, String image, int price, int starCount, List<ProductOptionDTO> options) {
+    public ProductDTO(int id, String name, String description, String image, int price, int starCount, List<ProductOptionDTO> options) {
         this.id = id;
         this.name = name;
         this.description = description;
