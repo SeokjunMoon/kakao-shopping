@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 public class ProductDTO {
     final private int id;
-    final private String name;
+    final private String productName;
     final private String description;
     final private String image;
     final private int price;
@@ -16,9 +16,9 @@ public class ProductDTO {
     final private List<ProductOptionDTO> options;
 
     @Builder
-    public ProductDTO(int id, String name, String description, String image, int price, int starCount, List<ProductOptionDTO> options) {
+    public ProductDTO(int id, String productName, String description, String image, int price, int starCount, List<ProductOptionDTO> options) {
         this.id = id;
-        this.name = name;
+        this.productName = productName;
         this.description = description;
         this.image = image;
         this.price = price;

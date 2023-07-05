@@ -96,17 +96,17 @@ public class ProductRestControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("true"));
 
         resultActions.andExpect(jsonPath("$.response.id").value(1));
-        resultActions.andExpect(jsonPath("$.response.name").value("기본에 슬라이딩 지퍼백 크리스마스/플라워에디션 에디션 외 주방용품 특가전"));
+        resultActions.andExpect(jsonPath("$.response.productName").value("기본에 슬라이딩 지퍼백 크리스마스/플라워에디션 에디션 외 주방용품 특가전"));
         resultActions.andExpect(jsonPath("$.response.description").value(""));
         resultActions.andExpect(jsonPath("$.response.image").value("/images/1.jpg"));
         resultActions.andExpect(jsonPath("$.response.price").value(1000));
 
         resultActions.andExpect(jsonPath("$.response.options[0].id").value(1));
-        resultActions.andExpect(jsonPath("$.response.options[0].name").value("01. 슬라이딩 지퍼백 크리스마스에디션 4종"));
+        resultActions.andExpect(jsonPath("$.response.options[0].optionName").value("01. 슬라이딩 지퍼백 크리스마스에디션 4종"));
         resultActions.andExpect(jsonPath("$.response.options[0].price").value(10000));
 
         resultActions.andExpect(jsonPath("$.response.options[1].id").value(2));
-        resultActions.andExpect(jsonPath("$.response.options[1].name").value("02. 슬라이딩 지퍼백 플라워에디션 5종"));
+        resultActions.andExpect(jsonPath("$.response.options[1].optionName").value("02. 슬라이딩 지퍼백 플라워에디션 5종"));
         resultActions.andExpect(jsonPath("$.response.options[1].price").value(10900));
     }
 }

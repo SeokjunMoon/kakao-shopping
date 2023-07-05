@@ -6,13 +6,13 @@ import lombok.Getter;
 @Getter
 public class ProductOptionDTO {
     final private int id;
-    final private String name;
+    final private String optionName;
     final private int price;
 
     @Builder
-    public ProductOptionDTO(int id, String name, int price) {
+    public ProductOptionDTO(int id, String optionName, int price) {
         this.id = id;
-        this.name = name;
+        this.optionName = optionName;
         this.price = price;
     }
 }

@@ -2,20 +2,19 @@ package com.kakao.shopping.domain.cart.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 public class CartProductDTO {
     final private int id;
-    final private String name;
-    final private List<CartItemDTO> cartItems;
+    final private String productName;
+    final private List<CartItemDTO> carts;
 
     @Builder
-    public CartProductDTO(int id, String name, List<CartItemDTO> cartItems) {
+    public CartProductDTO(int id, String productName, List<CartItemDTO> carts) {
         this.id = id;
-        this.name = name;
-        this.cartItems = cartItems;
+        this.productName = productName;
+        this.carts = carts;
     }
 }
