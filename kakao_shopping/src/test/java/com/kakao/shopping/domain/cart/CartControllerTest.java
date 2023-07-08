@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class CartRestControllerTest {
+public class CartControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
