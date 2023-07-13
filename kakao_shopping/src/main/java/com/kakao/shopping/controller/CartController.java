@@ -1,7 +1,8 @@
 package com.kakao.shopping.controller;
 
 import com.kakao.shopping._core.utils.ApiUtils;
-import com.kakao.shopping.domain.cart.dto.*;
+import com.kakao.shopping.dto.CartInsertRequest;
+import com.kakao.shopping.dto.CartUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

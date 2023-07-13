@@ -1,4 +1,4 @@
-package com.kakao.shopping.domain.order.dto;
+package com.kakao.shopping.dto;
 
 import java.util.List;
 

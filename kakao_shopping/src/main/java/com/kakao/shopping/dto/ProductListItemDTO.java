@@ -1,4 +1,4 @@
-package com.kakao.shopping.domain.product.dto;
+package com.kakao.shopping.dto;
 
 public record ProductListItemDTO(
         int id,

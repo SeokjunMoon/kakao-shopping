@@ -1,4 +1,4 @@
-package com.kakao.shopping.domain.cart.dto;
+package com.kakao.shopping.dto;
 
 public record CartInsertRequest(
         int optionId,
