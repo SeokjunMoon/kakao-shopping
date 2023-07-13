@@ -1,4 +1,4 @@
-package com.kakao.shopping.dto;
+package com.kakao.shopping.dto.user;
 
 public record UserRegisterRequest(
         String name,

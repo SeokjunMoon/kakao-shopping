@@ -1,4 +1,4 @@
-package com.kakao.shopping.dto;
+package com.kakao.shopping.dto.order;
 
 public record OrderUpdateRequest(
         int orderId,
