@@ -1,5 +1,6 @@
 package com.kakao.shopping.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,9 +12,16 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String name;
+
+    @Column(nullable = false)
     private Long price;
+
+    @Column(length = 1000)
     private String description;
+
+    @Column(nullable = false, length = 100)
     private String image;
 
     protected Product() {
