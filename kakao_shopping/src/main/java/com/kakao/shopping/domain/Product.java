@@ -1,9 +1,12 @@
 package com.kakao.shopping.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -24,19 +27,34 @@ public class Product {
     @Column(nullable = false, length = 100)
     private String image;
 
+    @CreatedDate
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @CreatedBy
+    @Column(nullable = false)
+    private Long createdBy;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime modifiedAt;
+
+    @LastModifiedBy
+    @Column(nullable = false)
+    private Long modifiedBy;
+
     protected Product() {
     }
 
-    private Product(Long id, String name, Long price, String description, String image) {
-        this.id = id;
+    private Product(String name, Long price, String description, String image) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.image = image;
     }
 
-    public static Product of(Long id, String name, Long price, String description, String image) {
-        return new Product(id, name, price, description, image);
+    public static Product of(String name, Long price, String description, String image) {
+        return new Product(name, price, description, image);
     }
 
     @Override

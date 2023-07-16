@@ -1,11 +1,17 @@
 package com.kakao.shopping.domain;
 
+import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
 @Entity
 public class UserAccount {
     @Id
@@ -24,19 +30,26 @@ public class UserAccount {
     @Column(nullable = false, length = 30)
     private String roles;
 
+    @CreatedDate
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
     protected UserAccount() {
     }
 
-    private UserAccount(Long id, String name, String email, String password, String roles) {
-        this.id = id;
+    private UserAccount(String name, String email, String password, String roles, LocalDateTime createdAt) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.createdAt = createdAt;
     }
 
-    public static UserAccount of(Long id, String name, String email, String password, String roles) {
-        return new UserAccount(id, name, email, password, roles);
+    public static UserAccount of(String name, String email, String password, String roles, LocalDateTime createdAt) {
+        return new UserAccount(name, email, password, roles, createdAt);
     }
 
     @Override
