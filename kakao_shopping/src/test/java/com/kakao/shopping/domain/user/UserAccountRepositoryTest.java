@@ -33,7 +33,7 @@ public class UserAccountRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        userAccountRepository.save(UserAccount.of("one", "one@naver.com", "qwer1234", LocalDate.of(2000, 9, 15), "ROLES_USER", LocalDateTime.now()));
+        userAccountRepository.save(UserAccount.of("one", "one@naver.com", "qwer1234", LocalDate.of(2000, 9, 15), "ROLES_USER"));
         entityManager.clear();
     }
 
@@ -47,7 +47,7 @@ public class UserAccountRepositoryTest {
     @Test
     public void insertTest() {
         // given
-        UserAccount userAccount = UserAccount.of("test", "test@naver.com", "qwer1234", LocalDate.of(2000, 1, 1), "ROLES_USER", LocalDateTime.now());
+        UserAccount userAccount = UserAccount.of("test", "test@naver.com", "qwer1234", LocalDate.of(2000, 1, 1), "ROLES_USER");
         long previousUserAccountCount = userAccountRepository.count();
 
         // when

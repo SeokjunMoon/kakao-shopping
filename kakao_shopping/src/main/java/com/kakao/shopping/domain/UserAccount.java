@@ -44,17 +44,17 @@ public class UserAccount {
     protected UserAccount() {
     }
 
-    private UserAccount(String name, String email, String password, LocalDate birthdate, String roles, LocalDateTime createdAt) {
+    private UserAccount(String name, String email, String password, LocalDate birthdate, String roles) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
         this.roles = roles;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 
-    public static UserAccount of(String name, String email, String password, LocalDate birthdate, String roles, LocalDateTime createdAt) {
-        return new UserAccount(name, email, password, birthdate, roles, createdAt);
+    public static UserAccount of(String name, String email, String password, LocalDate birthdate, String roles) {
+        return new UserAccount(name, email, password, birthdate, roles);
     }
 
     @Override
