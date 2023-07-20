@@ -1,8 +1,11 @@
 package com.kakao.shopping.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
 @NamedEntityGraph(
         name = "OptionWithProduct",
         attributeNodes = @NamedAttributeNode("product")
