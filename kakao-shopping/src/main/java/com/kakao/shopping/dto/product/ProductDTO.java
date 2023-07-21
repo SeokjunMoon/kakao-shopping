@@ -1,14 +1,16 @@
 package com.kakao.shopping.dto.product;
 
+import com.kakao.shopping.domain.Option;
+
 import java.util.List;
 
 public record ProductDTO(
-        int id,
-        String productName,
+        Long id,
+        String name,
         String description,
         String image,
-        int price,
-        int starCount,
-        List<ProductOptionDTO> options
+        Long price,
+        Long starCount,
+        List<Option> options
 ) {
 }

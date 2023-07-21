@@ -9,4 +9,7 @@ import java.util.List;
 public interface OptionRepository extends JpaRepository<Option, Long> {
     @EntityGraph("OptionWithProduct")
     List<Option> findAll();
+
+    @EntityGraph("OptionWithProduct")
+    List<Option> findAllByProductId(Long productId);
 }

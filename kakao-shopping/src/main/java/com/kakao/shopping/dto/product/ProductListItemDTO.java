@@ -1,10 +1,11 @@
 package com.kakao.shopping.dto.product;
 
 public record ProductListItemDTO(
-        int id,
+        Long id,
         String productName,
         String description,
         String image,
-        int price
+        Long price,
+        Long starCount
 ) {
 }

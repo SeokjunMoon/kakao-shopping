@@ -29,6 +29,8 @@ public class Product {
     @Column(nullable = false, length = 100)
     private String image;
 
+    private Long starCount;
+
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -48,15 +50,16 @@ public class Product {
     protected Product() {
     }
 
-    private Product(String name, Long price, String description, String image) {
+    private Product(String name, Long price, String description, String image, Long starCount) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.image = image;
+        this.starCount = starCount;
     }
 
-    public static Product of(String name, Long price, String description, String image) {
-        return new Product(name, price, description, image);
+    public static Product of(String name, Long price, String description, String image, Long starCount) {
+        return new Product(name, price, description, image, starCount);
     }
 
     @Override
@@ -69,5 +72,30 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void setStarCount(Long starCount) {
+        this.starCount = starCount;
+        this.modifiedAt = LocalDateTime.now();
     }
 }
