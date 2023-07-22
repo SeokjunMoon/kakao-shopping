@@ -1,15 +1,15 @@
 package com.kakao.shopping.repository;
 
-import com.kakao.shopping.domain.Option;
+import com.kakao.shopping.domain.ProductOption;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OptionRepository extends JpaRepository<Option, Long> {
+public interface OptionRepository extends JpaRepository<ProductOption, Long> {
     @EntityGraph("OptionWithProduct")
-    List<Option> findAll();
+    List<ProductOption> findAll();
 
     @EntityGraph("OptionWithProduct")
-    List<Option> findAllByProductId(Long productId);
+    List<ProductOption> findAllByProductId(Long productId);
 }
