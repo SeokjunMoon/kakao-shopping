@@ -1,10 +1,10 @@
 package com.kakao.shopping.dto.cart;
 
-import com.kakao.shopping.dto.product.ProductOptionDTO;
+import com.kakao.shopping.dto.product.option.OptionDTO;
 
 public record CartItemDTO(
         int id,
-        ProductOptionDTO option,
+        OptionDTO option,
         int quantity,
         int price
 ) {

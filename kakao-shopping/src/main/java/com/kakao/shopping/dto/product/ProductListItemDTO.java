@@ -2,7 +2,7 @@ package com.kakao.shopping.dto.product;
 
 public record ProductListItemDTO(
         Long id,
-        String productName,
+        String name,
         String description,
         String image,
         Long price,

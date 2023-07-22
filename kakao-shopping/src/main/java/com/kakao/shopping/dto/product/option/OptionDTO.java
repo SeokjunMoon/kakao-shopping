@@ -1,8 +1,10 @@
-package com.kakao.shopping.dto.product;
+package com.kakao.shopping.dto.product.option;
 
-public record ProductOptionDTO(
-        int id,
+import com.kakao.shopping.dto.product.ProductListItemDTO;
+
+public record OptionDTO(
+        ProductListItemDTO product,
         String name,
-        int price
+        Long price
 ) {
 }
