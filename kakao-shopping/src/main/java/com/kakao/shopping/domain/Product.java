@@ -14,14 +14,11 @@ import java.util.Objects;
 @Entity
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 100)
     private String name;
-
-    @Column(nullable = false)
-    private Long price;
 
     @Column(length = 1000)
     private String description;
@@ -29,37 +26,40 @@ public class Product {
     @Column(nullable = false, length = 100)
     private String image;
 
+    @Column(nullable = false)
+    private Long price;
+
     private Long starCount;
 
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @CreatedBy
-    @Column(nullable = false)
-    private Long createdBy;
+//    @CreatedBy
+//    @Column(nullable = false)
+//    private Long createdBy;
 
     @LastModifiedDate
-    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    @LastModifiedBy
-    @Column(nullable = false)
-    private Long modifiedBy;
+//    @LastModifiedBy
+//    @Column(nullable = false)
+//    private Long modifiedBy;
 
     protected Product() {
     }
 
-    private Product(String name, Long price, String description, String image, Long starCount) {
+    private Product(String name, String description, String image, Long price) {
         this.name = name;
-        this.price = price;
         this.description = description;
         this.image = image;
-        this.starCount = starCount;
+        this.price = price;
+        this.starCount = 0L;
+        this.createdAt = LocalDateTime.now();
     }
 
-    public static Product of(String name, Long price, String description, String image, Long starCount) {
-        return new Product(name, price, description, image, starCount);
+    public static Product of(String name, String description, String image, Long price) {
+        return new Product(name, description, image, price);
     }
 
     @Override
@@ -79,11 +79,6 @@ public class Product {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setPrice(Long price) {
-        this.price = price;
-        this.modifiedAt = LocalDateTime.now();
-    }
-
     public void setDescription(String description) {
         this.description = description;
         this.modifiedAt = LocalDateTime.now();
@@ -91,6 +86,11 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
         this.modifiedAt = LocalDateTime.now();
     }
 

@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-public class Order {
+public class OrderDetail {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,15 +19,15 @@ public class Order {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    protected Order() {
+    protected OrderDetail() {
     }
 
-    private Order(UserAccount userAccount) {
+    private OrderDetail(UserAccount userAccount) {
         this.userAccount = userAccount;
         this.createdAt = LocalDateTime.now();
     }
 
-    public static Order of(UserAccount userAccount) {
-        return new Order(userAccount);
+    public static OrderDetail of(UserAccount userAccount) {
+        return new OrderDetail(userAccount);
     }
 }

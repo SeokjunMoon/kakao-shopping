@@ -11,34 +11,37 @@ import java.time.LocalDateTime;
         attributeNodes = @NamedAttributeNode("product")
 )
 @Entity
-public class Option {
+public class ProductOption {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     private Product product;
 
+    @Column(nullable = false)
     private String name;
 
-    private int price;
+    @Column(nullable = false)
+    private Long price;
 
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
 
-    protected Option() {
+    protected ProductOption() {
     }
 
-    private Option(Product product, String name, int price) {
+    private ProductOption(Product product, String name, Long price) {
         this.product = product;
         this.name = name;
         this.price = price;
         this.createdAt = LocalDateTime.now();
     }
 
-    public static Option of(Product product, String name, int price) {
-        return new Option(product, name, price);
+    public static ProductOption of(Product product, String name, Long price) {
+        return new ProductOption(product, name, price);
     }
 
     public void setProduct(Product product) {
@@ -51,7 +54,7 @@ public class Option {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long price) {
         this.price = price;
         this.modifiedAt = LocalDateTime.now();
     }

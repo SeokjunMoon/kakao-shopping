@@ -15,7 +15,7 @@ public class Cart {
     private UserAccount userAccount;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Option option;
+    private ProductOption productOption;
 
     @Column(nullable = false)
     private int quantity;
@@ -26,14 +26,14 @@ public class Cart {
     protected Cart() {
     }
 
-    private Cart(UserAccount userAccount, Option option, int quantity, int price) {
+    private Cart(UserAccount userAccount, ProductOption productOption, int quantity, int price) {
         this.userAccount = userAccount;
-        this.option = option;
+        this.productOption = productOption;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public static Cart of(UserAccount userAccount, Option option, int quantity, int price) {
-        return new Cart(userAccount, option, quantity, price);
+    public static Cart of(UserAccount userAccount, ProductOption productOption, int quantity, int price) {
+        return new Cart(userAccount, productOption, quantity, price);
     }
 }

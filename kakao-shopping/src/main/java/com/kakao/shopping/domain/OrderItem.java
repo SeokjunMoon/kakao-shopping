@@ -11,20 +11,20 @@ import java.time.LocalDateTime;
 @Entity
 public class OrderItem {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
+    private OrderDetail orderDetail;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Option option;
+    private ProductOption productOption;
 
     @Column(nullable = false)
-    private int quantity;
+    private Long quantity;
 
     @Column(nullable = false)
-    private int price;
+    private Long price;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -35,21 +35,21 @@ public class OrderItem {
     protected OrderItem() {
     }
 
-    private OrderItem(Order order, Option option, int quantity, int price) {
-        this.order = order;
-        this.option = option;
+    private OrderItem(OrderDetail orderDetail, ProductOption productOption, Long quantity, Long price) {
+        this.orderDetail = orderDetail;
+        this.productOption = productOption;
         this.quantity = quantity;
         this.price = price;
         this.createdAt = LocalDateTime.now();
     }
 
-    public static OrderItem of(Order order, Option option, int quantity, int price) {
-        return new OrderItem(order, option, quantity, price);
+    public static OrderItem of(OrderDetail orderDetail, ProductOption productOption, Long quantity, Long price) {
+        return new OrderItem(orderDetail, productOption, quantity, price);
     }
 
-    public void update(int quantity) {
+    public void update(Long quantity) {
         this.quantity = quantity;
-        this.price = quantity * this.option.getPrice();
+        this.price = quantity * this.productOption.getPrice();
         this.modifiedAt = LocalDateTime.now();
     }
 }
