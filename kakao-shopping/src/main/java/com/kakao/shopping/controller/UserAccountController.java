@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+public class UserAccountController {
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody UserRegisterRequest userRegisterRequest) {
         return ResponseEntity.ok().body(ApiUtils.success(null));

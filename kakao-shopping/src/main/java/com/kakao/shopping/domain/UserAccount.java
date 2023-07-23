@@ -3,6 +3,7 @@ package com.kakao.shopping.domain;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,17 +45,17 @@ public class UserAccount {
     protected UserAccount() {
     }
 
-    private UserAccount(String name, String email, String password, LocalDate birthdate, String roles) {
+    private UserAccount(String name, String email, String password, LocalDate birthdate) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
-        this.roles = roles;
+        this.roles = "USER";
         this.createdAt = LocalDateTime.now();
     }
 
-    public static UserAccount of(String name, String email, String password, LocalDate birthdate, String roles) {
-        return new UserAccount(name, email, password, birthdate, roles);
+    public static UserAccount of(String name, String email, String password, LocalDate birthdate) {
+        return new UserAccount(name, email, password, birthdate);
     }
 
     @Override
@@ -69,28 +70,28 @@ public class UserAccount {
         return Objects.hash(id);
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         this.name = name;
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
+    public void updateRoles(String roles) {
+        this.roles = roles;
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
-        this.modifiedAt = LocalDateTime.now();
+    // 비밀번호가 그대로 DB에 보관되지 않도록 암호화 하기 위한 메서드
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
     }
 }
