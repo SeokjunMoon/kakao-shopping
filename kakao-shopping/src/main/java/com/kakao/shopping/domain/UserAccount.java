@@ -1,5 +1,6 @@
 package com.kakao.shopping.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -45,17 +46,14 @@ public class UserAccount {
     protected UserAccount() {
     }
 
-    private UserAccount(String name, String email, String password, LocalDate birthdate) {
+    @Builder
+    public UserAccount(Long id, String name, String email, String password, LocalDate birthdate, String roles) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
-        this.roles = "USER";
+        this.roles = (roles == null? "USER" : roles);
         this.createdAt = LocalDateTime.now();
-    }
-
-    public static UserAccount of(String name, String email, String password, LocalDate birthdate) {
-        return new UserAccount(name, email, password, birthdate);
     }
 
     @Override

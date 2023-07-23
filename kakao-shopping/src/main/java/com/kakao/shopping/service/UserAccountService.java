@@ -1,28 +1,28 @@
 package com.kakao.shopping.service;
 
+import com.kakao.shopping._core.errors.exception.PasswordMismatchException;
+import com.kakao.shopping._core.security.JwtTokenProvider;
 import com.kakao.shopping.domain.UserAccount;
+import com.kakao.shopping.dto.user.UserLoginRequest;
 import com.kakao.shopping.dto.user.UserRegisterRequest;
 import com.kakao.shopping.repository.UserAccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.InvalidPropertiesFormatException;
 
+@RequiredArgsConstructor
 @Service
 public class UserAccountService implements UserDetailsService {
     private final UserAccountRepository userAccountRepository;
-
-    public UserAccountService(
-            @Autowired UserAccountRepository userAccountRepository
-    ) {
-        this.userAccountRepository = userAccountRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -34,24 +34,36 @@ public class UserAccountService implements UserDetailsService {
                 .build();
     }
 
-    public void create(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
+    public void regist(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
         checkEmailFormat(request.email());
         checkNameFormat(request.name());
         checkPasswordFormat(request.password());
 
         try {
             userAccountRepository.save(
-                    UserAccount.of(
-                            request.name(),
-                            request.email(),
-                            request.password(),
-                            request.birthdate()
-                    )
+                    UserAccount.builder()
+                            .name(request.name())
+                            .email(request.email())
+                            .password(request.password())
+                            .birthdate(request.birthdate())
+                            .build()
             );
         }
         catch (DataIntegrityViolationException error) {
             throw new DuplicateKeyException("중복된 email 입니다.");
         }
+    }
+
+    public String login(UserLoginRequest request) throws PasswordMismatchException {
+        UserAccount userAccount = userAccountRepository.findByEmail(request.email()).orElseThrow(
+                () -> new UsernameNotFoundException("등록되지 않은 이메일 입니다.")
+        );
+
+        if (!passwordEncoder.matches(request.password(), userAccount.getPassword())) {
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return JwtTokenProvider.create(userAccount);
     }
 
     private void checkEmailFormat(String email) throws InvalidPropertiesFormatException {
@@ -72,13 +84,13 @@ public class UserAccountService implements UserDetailsService {
     }
 
     private void checkPasswordFormat(String password) throws InvalidPropertiesFormatException {
-        if (password == null || password.length() < 1 || password.length() > 256) {
-            throw new InvalidPropertiesFormatException("비밀번호의 길이는 1 이상 256 이하만 가능합니다.");
+        if (password == null || password.length() < 8 || password.length() > 256) {
+            throw new InvalidPropertiesFormatException("비밀번호의 길이는 8 이상 256 이하만 가능합니다.");
         }
 
         String regex = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$";
         if (!password.matches(regex)) {
-            throw new InvalidPropertiesFormatException("비밀번호는 1개 이상의 소문자, 1개 이상의 대문자, 1개 이상의 특수문자를 포함해야 합니다.");
+            throw new InvalidPropertiesFormatException("비밀번호는 1개 이상의 영문자, 1개 이상의 숫자, 1개 이상의 특수문자를 포함해야 합니다.");
         }
     }
 }
