@@ -1,5 +1,8 @@
 package com.kakao.shopping.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kakao.shopping._core.errors.exception.PasswordMismatchException;
 import com.kakao.shopping._core.security.JwtTokenProvider;
 import com.kakao.shopping.domain.UserAccount;
@@ -34,7 +37,7 @@ public class UserAccountService implements UserDetailsService {
                 .build();
     }
 
-    public void regist(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
+    public void register(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
         checkEmailFormat(request.email());
         checkNameFormat(request.name());
         checkPasswordFormat(request.password());
@@ -44,7 +47,7 @@ public class UserAccountService implements UserDetailsService {
                     UserAccount.builder()
                             .name(request.name())
                             .email(request.email())
-                            .password(request.password())
+                            .password(passwordEncoder.encode(request.password()))
                             .birthdate(request.birthdate())
                             .build()
             );
@@ -88,7 +91,7 @@ public class UserAccountService implements UserDetailsService {
             throw new InvalidPropertiesFormatException("비밀번호의 길이는 8 이상 256 이하만 가능합니다.");
         }
 
-        String regex = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$";
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$";
         if (!password.matches(regex)) {
             throw new InvalidPropertiesFormatException("비밀번호는 1개 이상의 영문자, 1개 이상의 숫자, 1개 이상의 특수문자를 포함해야 합니다.");
         }
