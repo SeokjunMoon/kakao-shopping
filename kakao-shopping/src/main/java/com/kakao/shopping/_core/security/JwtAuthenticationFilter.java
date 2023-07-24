@@ -24,19 +24,18 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-//        super.doFilterInternal(request, response, chain);
-        String header = request.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
 
-        if (header == null || !header.startsWith(JwtTokenProvider.HEADER)) {
+        if (token == null) {
             chain.doFilter(request, response);
+            return;
         }
 
         try {
-            String token = Objects.requireNonNull(header).replace(JwtTokenProvider.HEADER, "");
             DecodedJWT decodedJWT = JwtTokenProvider.verify(token);
             Long userId = decodedJWT.getClaim("id").asLong();
             String roles = decodedJWT.getClaim("role").asString();
-            logger.info("request user id: " + userId);
+            logger.debug("request user id: " + userId);
 
             UserAccount user = UserAccount.builder().id(userId).roles(roles).build();
             CustomUserDetails userDetails = new CustomUserDetails(user);
@@ -46,6 +45,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     userDetails.getAuthorities()
             );
             SecurityContextHolder.getContext().setAuthentication(authenticationManager);
+            logger.debug("인증 객체 생성");
         }
         catch (SignatureVerificationException exception) {
             logger.error("토큰 검증 실패");
