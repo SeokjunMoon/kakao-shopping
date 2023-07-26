@@ -3,8 +3,8 @@ package com.kakao.shopping._core.errors.exception;
 import com.kakao.shopping._core.utils.ApiUtils;
 import org.springframework.http.HttpStatus;
 
-public class UnAuthorizedRequestException extends RuntimeException implements CustomException {
-    public UnAuthorizedRequestException(String message) {
+public class UnauthorizedRequestException extends RuntimeException implements CustomException {
+    public UnauthorizedRequestException(String message) {
         super(message);
     }
 

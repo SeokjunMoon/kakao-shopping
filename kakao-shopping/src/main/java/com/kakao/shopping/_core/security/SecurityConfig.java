@@ -3,7 +3,7 @@ package com.kakao.shopping._core.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kakao.shopping._core.errors.exception.CustomException;
 import com.kakao.shopping._core.errors.exception.PermissionDeniedException;
-import com.kakao.shopping._core.errors.exception.UnAuthorizedRequestException;
+import com.kakao.shopping._core.errors.exception.UnauthorizedRequestException;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,7 +71,7 @@ public class SecurityConfig {
 
                 .and()
                 .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
-                    createErrorResponse(response, new UnAuthorizedRequestException("인증되지 않은 요청입니다."));
+                    createErrorResponse(response, new UnauthorizedRequestException("인증되지 않은 요청입니다."));
                 })
 
                 .and()
