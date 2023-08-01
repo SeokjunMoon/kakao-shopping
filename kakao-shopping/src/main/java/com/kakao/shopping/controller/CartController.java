@@ -6,6 +6,7 @@ import com.kakao.shopping.dto.cart.CartInsertRequest;
 import com.kakao.shopping.dto.cart.CartUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,17 +19,17 @@ public class CartController {
     }
 
     @PostMapping("/carts")
-    public ResponseEntity<?> insert(@RequestBody List<CartInsertRequest> request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> insert(@RequestBody List<CartInsertRequest> request, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 
     @PutMapping("/carts")
-    public ResponseEntity<?> update(@RequestBody List<CartUpdateRequest> request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> update(@RequestBody List<CartUpdateRequest> request, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 
     @DeleteMapping("/carts/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> delete(@PathVariable int id, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 }

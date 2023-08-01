@@ -3,8 +3,8 @@ package com.kakao.shopping.dto.cart;
 import java.util.List;
 
 public record CartProductDTO(
-        int id,
-        String productName,
+        Long id,
+        String name,
         List<CartItemDTO> carts
 ) {
 }
