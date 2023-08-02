@@ -5,8 +5,8 @@ import com.kakao.shopping.domain.Product;
 import com.kakao.shopping.dto.product.ProductDTO;
 import com.kakao.shopping.dto.product.ProductListItemDTO;
 import com.kakao.shopping.dto.product.ProductRequest;
-import com.kakao.shopping.dto.product.option.OptionDTO;
 import com.kakao.shopping.dto.product.option.OptionRequest;
+import com.kakao.shopping.dto.product.option.ProductOptionDTO;
 import com.kakao.shopping.repository.OptionRepository;
 import com.kakao.shopping.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,10 @@ public class ProductService {
     public ProductDTO findProductById(Long id) {
         List<ProductOption> productOptions = optionRepository.findAllByProductId(id);
         Product product = productOptions.get(0).getProduct();
+        List<ProductOptionDTO> options = productOptions
+                .stream()
+                .map(productOption -> new ProductOptionDTO(productOption.getId(), productOption.getName(), productOption.getPrice()))
+                .toList();
         return new ProductDTO(
                 product.getId(),
                 product.getName(),
@@ -39,7 +43,7 @@ public class ProductService {
                 product.getImage(),
                 product.getPrice(),
                 product.getStarCount(),
-                productOptions
+                options
         );
     }
 
@@ -66,25 +70,6 @@ public class ProductService {
                         ))
                         .toList()
         );
-    }
-
-    public List<OptionDTO> findAllByProductId(Long id) {
-        List<ProductOption> productOptions = optionRepository.findAllByProductId(id);
-        return productOptions
-                .stream()
-                .map(option -> {
-                    Product product = option.getProduct();
-                    ProductListItemDTO productDTO = toProductListItemDTO(product);
-                    return new OptionDTO(productDTO, option.getName(), option.getPrice());
-                })
-                .toList();
-    }
-
-    public OptionDTO findAllOptionsByProductId(Long id) {
-        ProductOption productOption = optionRepository.findById(id).orElseThrow();
-        Product product = productOption.getProduct();
-        ProductListItemDTO productDTO = toProductListItemDTO(product);
-        return new OptionDTO(productDTO, productOption.getName(), productOption.getPrice());
     }
 
     public ProductOption saveOption(OptionRequest.Insert request) {

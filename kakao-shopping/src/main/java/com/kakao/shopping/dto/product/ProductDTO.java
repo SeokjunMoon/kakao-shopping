@@ -1,6 +1,6 @@
 package com.kakao.shopping.dto.product;
 
-import com.kakao.shopping.domain.ProductOption;
+import com.kakao.shopping.dto.product.option.ProductOptionDTO;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ public record ProductDTO(
         String image,
         Long price,
         Long starCount,
-        List<ProductOption> productOptions
+        List<ProductOptionDTO> productOptions
 ) {
 }
