@@ -6,10 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,7 +15,7 @@ import java.util.Objects;
 @Entity
 public class UserAccount {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 45)
@@ -48,6 +45,7 @@ public class UserAccount {
 
     @Builder
     public UserAccount(Long id, String name, String email, String password, LocalDate birthdate, String roles) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
