@@ -6,16 +6,18 @@ import com.kakao.shopping.domain.Cart;
 import com.kakao.shopping.domain.ProductOption;
 import com.kakao.shopping.domain.UserAccount;
 import com.kakao.shopping.dto.cart.*;
+import com.kakao.shopping.dto.cart.request.CartDeleteRequest;
+import com.kakao.shopping.dto.cart.request.CartInsertRequest;
+import com.kakao.shopping.dto.cart.request.CartUpdateRequest;
+import com.kakao.shopping.dto.cart.response.CartUpdateResponse;
 import com.kakao.shopping.repository.CartRepository;
 import com.kakao.shopping.repository.OptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,14 +26,14 @@ public class CartService {
     private final OptionRepository optionRepository;
 
     @Transactional
-    public void addCartList(List<CartInsertRequest> requests, UserAccount sessionUser) {
+    public void addCartList(List<CartInsertRequest> requests, UserAccount userAccount) {
         List<Long> ids = requests.stream().map(CartInsertRequest::optionId).distinct().toList();
         if (ids.size() != requests.size()) {
             throw new BadRequestException("잘못된 요청입니다. 요청에서 중복이 발생하였습니다.");
         }
 
         List<ProductOption> options = optionRepository.findAllById(ids);
-        List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(sessionUser.getId()).orElse(null);
+        List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId()).orElse(null);
 
         requests
                 .forEach(request -> {
@@ -51,7 +53,7 @@ public class CartService {
                                         .orElseThrow(() -> new ObjectNotFoundException("해당 옵션을 찾을 수 없습니다."));
 
                                 return Cart.builder()
-                                        .userAccount(sessionUser)
+                                        .userAccount(userAccount)
                                         .productOption(option)
                                         .quantity(0L)
                                         .price(0L)
@@ -116,7 +118,7 @@ public class CartService {
 
                     Long quantity = request.quantity();
 
-                    if (quantity < 0) {
+                    if (quantity <= 0) {
                         throw new BadRequestException("잘못된 요청입니다. 수량은 음수가 될 수 없습니다.");
                     }
 
@@ -135,5 +137,10 @@ public class CartService {
                 .toList();
 
         return new CartUpdateResponse(updatedCarts, totalPrice);
+    }
+
+    public void delete(List<CartDeleteRequest> requests, UserAccount userAccount) {
+        List<Long> ids = requests.stream().map(CartDeleteRequest::cartId).toList();
+        cartRepository.deleteAllById(ids);
     }
 }
