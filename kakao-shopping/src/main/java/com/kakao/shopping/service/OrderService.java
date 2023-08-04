@@ -2,6 +2,7 @@ package com.kakao.shopping.service;
 
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.ObjectNotFoundException;
+import com.kakao.shopping._core.errors.exception.OutOfStockException;
 import com.kakao.shopping._core.utils.PriceCalculator;
 import com.kakao.shopping.domain.*;
 import com.kakao.shopping.dto.order.OrderDTO;
@@ -25,14 +26,7 @@ public class OrderService {
     private final CartRepository cartRepository;
 
     public OrderDTO findById(Long orderId, UserAccount userAccount) {
-        OrderDetail orderDetail = orderDetailRepository.findById(orderId).orElseThrow(
-                () -> new ObjectNotFoundException("존재하지 않는 주문입니다.")
-        );
-
-        if (!orderDetail.getUserAccount().equals(userAccount)) {
-            throw new BadRequestException("접근할 수 없는 주문내역 입니다.");
-        }
-
+        OrderDetail orderDetail = getOrderDetail(orderId, userAccount);
         List<OrderItem> items = orderItemRepository.findAllByOrderDetail(orderDetail);
         return toDTO(orderId, items);
     }
@@ -42,12 +36,33 @@ public class OrderService {
         List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId()).orElseThrow();
         if (carts.isEmpty()) throw new BadRequestException("장바구니가 비어있습니다.");
 
+        checkStock(carts);
         cartRepository.deleteAll(carts);
 
         OrderDetail orderDetail = orderDetailRepository.save(OrderDetail.of(userAccount));
         List<OrderItem> items = getOrderItems(carts, orderDetail);
 
         return toDTO(orderDetail.getId(), items);
+    }
+
+    private OrderDetail getOrderDetail(Long orderId, UserAccount userAccount) {
+        OrderDetail orderDetail = orderDetailRepository.findById(orderId).orElseThrow(
+                () -> new ObjectNotFoundException("존재하지 않는 주문입니다.")
+        );
+
+        if (!orderDetail.getUserAccount().equals(userAccount)) {
+            throw new BadRequestException("접근할 수 없는 주문내역 입니다.");
+        }
+        return orderDetail;
+    }
+
+    private static void checkStock(List<Cart> carts) {
+        carts
+                .forEach(cart -> {
+                    if (cart.getProductOption().getStock() < cart.getQuantity()) {
+                        throw new OutOfStockException("재고가 부족합니다.");
+                    }
+                });
     }
 
     private static List<OrderItem> getOrderItems(List<Cart> carts, OrderDetail orderDetail) {

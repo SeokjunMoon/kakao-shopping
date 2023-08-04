@@ -1,5 +1,6 @@
 package com.kakao.shopping.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -27,6 +28,9 @@ public class ProductOption {
     private Long price;
 
     @Column(nullable = false)
+    private Long stock;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
@@ -34,10 +38,21 @@ public class ProductOption {
     protected ProductOption() {
     }
 
+    @Builder
+    public ProductOption(Long id, Product product, String name, Long price, Long stock) {
+        this.id = id;
+        this.product = product;
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        this.createdAt = LocalDateTime.now();
+    }
+
     private ProductOption(Product product, String name, Long price) {
         this.product = product;
         this.name = name;
         this.price = price;
+        this.stock = 10L;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -57,18 +72,23 @@ public class ProductOption {
         return Objects.hash(id);
     }
 
-    public void setProduct(Product product) {
+    public void updateProduct(Product product) {
         this.product = product;
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         this.name = name;
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void setPrice(Long price) {
+    public void updatePrice(Long price) {
         this.price = price;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void updateStock(Long stock) {
+        this.stock = stock;
         this.modifiedAt = LocalDateTime.now();
     }
 }

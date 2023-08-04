@@ -28,7 +28,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders")
-    public ResponseEntity<?> update(@RequestBody OrderUpdateRequest request) {
+    public ResponseEntity<?> update(@RequestBody OrderUpdateRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 }
