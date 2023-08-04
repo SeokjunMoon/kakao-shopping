@@ -2,10 +2,8 @@ package com.kakao.shopping.service;
 
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.ObjectNotFoundException;
-import com.kakao.shopping.domain.Cart;
-import com.kakao.shopping.domain.OrderDetail;
-import com.kakao.shopping.domain.OrderItem;
-import com.kakao.shopping.domain.UserAccount;
+import com.kakao.shopping._core.utils.PriceCalculator;
+import com.kakao.shopping.domain.*;
 import com.kakao.shopping.dto.order.OrderDTO;
 import com.kakao.shopping.dto.order.OrderItemDTO;
 import com.kakao.shopping.dto.order.OrderProductDTO;
@@ -47,12 +45,16 @@ public class OrderService {
         cartRepository.deleteAll(carts);
 
         OrderDetail orderDetail = orderDetailRepository.save(OrderDetail.of(userAccount));
-        List<OrderItem> items = carts
+        List<OrderItem> items = getOrderItems(carts, orderDetail);
+
+        return toDTO(orderDetail.getId(), items);
+    }
+
+    private static List<OrderItem> getOrderItems(List<Cart> carts, OrderDetail orderDetail) {
+        return carts
                 .stream()
                 .map(cart -> OrderItem.of(orderDetail, cart.getProductOption(), cart.getQuantity(), cart.getPrice()))
                 .toList();
-
-        return toDTO(orderDetail.getId(), items);
     }
 
     private OrderDTO toDTO(Long orderId, List<OrderItem> items) {
@@ -61,18 +63,20 @@ public class OrderService {
                 .map(orderItem -> orderItem.getProductOption().getProduct())
                 .distinct()
                 .map(orderItem -> {
-                    List<OrderItemDTO> options = items
-                            .stream()
-                            .filter(item -> Objects.equals(item.getProductOption().getProduct().getId(), orderItem.getId()))
-                            .map(item -> new OrderItemDTO(item.getProductOption().getName(), item.getQuantity(), item.getPrice()))
-                            .toList();
-
+                    List<OrderItemDTO> options = getOrderItemDTOS(items, orderItem);
                     return new OrderProductDTO(orderItem.getName(), options);
                 })
                 .toList();
 
-        Long totalPrice = items.stream().mapToLong(OrderItem::getPrice).sum();
-
+        Long totalPrice = PriceCalculator.calculateOrder(items);
         return new OrderDTO(orderId, orderProducts, totalPrice);
+    }
+
+    private static List<OrderItemDTO> getOrderItemDTOS(List<OrderItem> items, Product orderItem) {
+        return items
+                .stream()
+                .filter(item -> Objects.equals(item.getProductOption().getProduct().getId(), orderItem.getId()))
+                .map(item -> new OrderItemDTO(item.getProductOption().getName(), item.getQuantity(), item.getPrice()))
+                .toList();
     }
 }
