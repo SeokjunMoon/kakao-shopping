@@ -31,35 +31,32 @@ public class Product {
 
     private Long starCount;
 
-    @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-//    @CreatedBy
-//    @Column(nullable = false)
-//    private Long createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserAccount createdBy;
 
-    @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-//    @LastModifiedBy
-//    @Column(nullable = false)
-//    private Long modifiedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserAccount modifiedBy;
 
     protected Product() {
     }
 
-    private Product(String name, String description, String image, Long price) {
+    private Product(String name, String description, String image, Long price, UserAccount userAccount) {
         this.name = name;
         this.description = description;
         this.image = image;
         this.price = price;
         this.starCount = 0L;
         this.createdAt = LocalDateTime.now();
+        this.createdBy = userAccount;
     }
 
-    public static Product of(String name, String description, String image, Long price) {
-        return new Product(name, description, image, price);
+    public static Product of(String name, String description, String image, Long price, UserAccount userAccount) {
+        return new Product(name, description, image, price, userAccount);
     }
 
     @Override
@@ -74,28 +71,38 @@ public class Product {
         return Objects.hash(id);
     }
 
-    public void setName(String name) {
+    public Product updateName(UserAccount userAccount, String name) {
         this.name = name;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void setDescription(String description) {
+    public Product updateDescription(UserAccount userAccount, String description) {
         this.description = description;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void setImage(String image) {
+    public Product updateImage(UserAccount userAccount, String image) {
         this.image = image;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void setPrice(Long price) {
+    public Product updatePrice(UserAccount userAccount, Long price) {
         this.price = price;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void setStarCount(Long starCount) {
+    public Product updateStarCount(UserAccount userAccount, Long starCount) {
         this.starCount = starCount;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
+        return this;
     }
 }

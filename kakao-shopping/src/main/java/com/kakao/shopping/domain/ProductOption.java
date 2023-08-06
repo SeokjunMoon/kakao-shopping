@@ -2,6 +2,9 @@ package com.kakao.shopping.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,31 +36,39 @@ public class ProductOption {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserAccount createdBy;
+
     private LocalDateTime modifiedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserAccount modifiedBy;
 
     protected ProductOption() {
     }
 
     @Builder
-    public ProductOption(Long id, Product product, String name, Long price, Long stock) {
+    public ProductOption(Long id, Product product, String name, Long price, Long stock, UserAccount userAccount) {
         this.id = id;
         this.product = product;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.createdAt = LocalDateTime.now();
+        this.createdBy = userAccount;
     }
 
-    private ProductOption(Product product, String name, Long price) {
+    private ProductOption(Product product, String name, Long price, UserAccount userAccount) {
         this.product = product;
         this.name = name;
         this.price = price;
         this.stock = 10L;
         this.createdAt = LocalDateTime.now();
+        this.createdBy = userAccount;
     }
 
-    public static ProductOption of(Product product, String name, Long price) {
-        return new ProductOption(product, name, price);
+    public static ProductOption of(Product product, String name, Long price, UserAccount userAccount) {
+        return new ProductOption(product, name, price, userAccount);
     }
 
     @Override
@@ -72,23 +83,27 @@ public class ProductOption {
         return Objects.hash(id);
     }
 
-    public void updateProduct(Product product) {
+    public void updateProduct(UserAccount userAccount, Product product) {
         this.product = product;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
     }
 
-    public void updateName(String name) {
+    public void updateName(UserAccount userAccount, String name) {
         this.name = name;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
     }
 
-    public void updatePrice(Long price) {
+    public void updatePrice(UserAccount userAccount, Long price) {
         this.price = price;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
     }
 
-    public void updateStock(Long stock) {
+    public void updateStock(UserAccount userAccount, Long stock) {
         this.stock = stock;
         this.modifiedAt = LocalDateTime.now();
+        this.modifiedBy = userAccount;
     }
 }
