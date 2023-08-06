@@ -21,26 +21,26 @@ import java.util.List;
 public class CartController {
     private final CartService cartService;
 
-    @GetMapping("/carts")
+    @GetMapping("/cart")
     public ResponseEntity<?> findAll(@AuthenticationPrincipal CustomUserDetails userDetails) {
         System.out.println("userId = " + userDetails.getUserAccount().getId());
         CartDTO carts = cartService.findAll(userDetails.getUserAccount());
         return ResponseEntity.ok(ApiUtils.success(carts));
     }
 
-    @PostMapping("/carts")
+    @PostMapping("/cart")
     public ResponseEntity<?> insert(@RequestBody List<CartInsertRequest> request, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
         cartService.addCartList(request, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 
-    @PutMapping("/carts")
+    @PutMapping("/cart")
     public ResponseEntity<?> update(@RequestBody List<CartUpdateRequest> request, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
         CartUpdateResponse carts = cartService.update(request, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(carts));
     }
 
-    @DeleteMapping("/carts")
+    @DeleteMapping("/cart")
     public ResponseEntity<?> delete(@RequestBody List<CartDeleteRequest> requests, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
         cartService.delete(requests, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(null));

@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("/order/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         OrderDTO order = orderService.findById(id, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(order));
     }
 
-    @PostMapping("/orders")
+    @PostMapping("/order")
     public ResponseEntity<?> insert(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         OrderDTO order = orderService.save(customUserDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(order));
     }
 
-    @PutMapping("/orders")
+    @PutMapping("/order")
     public ResponseEntity<?> update(@RequestBody OrderUpdateRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
