@@ -34,13 +34,13 @@ public class UserAccountService implements UserDetailsService {
                 .build();
     }
 
-    public void register(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
+    public UserAccount register(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
         checkEmailFormat(request.email());
         checkNameFormat(request.name());
         checkPasswordFormat(request.password());
 
         try {
-            userAccountRepository.save(
+            return userAccountRepository.save(
                     UserAccount.builder()
                             .name(request.name())
                             .email(request.email())
