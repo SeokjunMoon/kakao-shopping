@@ -5,6 +5,7 @@ import com.kakao.shopping._core.utils.ApiUtils;
 import com.kakao.shopping.dto.product.ProductDTO;
 import com.kakao.shopping.dto.product.ProductListItemDTO;
 import com.kakao.shopping.dto.product.request.OptionStockUpdateRequest;
+import com.kakao.shopping.dto.product.request.OptionUpdateRequest;
 import com.kakao.shopping.dto.product.request.ProductUpdateRequest;
 import com.kakao.shopping.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,9 @@ public class ProductController {
         List<ProductListItemDTO> products = productService.findAllProducts(pageRequest);
         return ResponseEntity.ok().body(ApiUtils.success(products));
     }
+
+//    @PostMapping("/product")
+//    public ResponseEntity<?> insertProduct()
 
     @GetMapping("/product/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
@@ -49,6 +53,16 @@ public class ProductController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         productService.updateProductById(userDetails.getUserAccount(), id, request);
+        return ResponseEntity.ok().body(ApiUtils.success(null));
+    }
+
+    @PutMapping("/product/option/{id}")
+    public ResponseEntity<?> updateProductOptionById(
+            @PathVariable Long id,
+            @RequestBody OptionUpdateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        productService.updateOptionById(userDetails.getUserAccount(), id, request);
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 }

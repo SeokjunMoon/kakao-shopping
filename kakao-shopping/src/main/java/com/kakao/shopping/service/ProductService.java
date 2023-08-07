@@ -11,6 +11,7 @@ import com.kakao.shopping.dto.product.ProductRequest;
 import com.kakao.shopping.dto.product.option.OptionRequest;
 import com.kakao.shopping.dto.product.option.ProductOptionDTO;
 import com.kakao.shopping.dto.product.request.OptionStockUpdateRequest;
+import com.kakao.shopping.dto.product.request.OptionUpdateRequest;
 import com.kakao.shopping.dto.product.request.ProductUpdateRequest;
 import com.kakao.shopping.repository.OptionRepository;
 import com.kakao.shopping.repository.ProductRepository;
@@ -35,7 +36,16 @@ public class ProductService {
     }
 
     public ProductDTO findProductById(Long id) {
+        if (id <= 0) {
+            throw new BadRequestException("id는 음수가 될 수 없습니다.");
+        }
+
         List<ProductOption> productOptions = optionRepository.findAllByProductId(id);
+
+        if (productOptions.isEmpty()) {
+            throw new BadRequestException("상품이 존재하지 않습니다.");
+        }
+
         Product product = productOptions.get(0).getProduct();
         List<ProductOptionDTO> options = productOptions
                 .stream()
@@ -105,9 +115,8 @@ public class ProductService {
     }
 
     public void updateStockById(UserAccount userAccount, OptionStockUpdateRequest request) {
-        ProductOption option = optionRepository.findById(request.optionId()).orElseThrow(
-                () -> new BadRequestException("존재하지 않는 옵션입니다.")
-        );
+        ProductOption option = optionRepository.findById(request.optionId())
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 옵션입니다."));
 
         if (!option.getCreatedBy().equals(userAccount)) {
             throw new PermissionDeniedException("해당 상품에 대한 권한이 없습니다.");
@@ -118,9 +127,8 @@ public class ProductService {
     }
 
     public void updateProductById(UserAccount userAccount, Long id, ProductUpdateRequest request) {
-        Product product = productRepository.findById(id).orElseThrow(
-                () -> new BadRequestException("존재하지 않는 상품입니다.")
-        );
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 상품입니다."));
 
         if (!product.getCreatedBy().equals(userAccount)) {
             throw new PermissionDeniedException("해당 상품에 대한 권한이 없습니다.");
@@ -132,6 +140,20 @@ public class ProductService {
                 .updateImage(userAccount, request.image())
                 .updatePrice(userAccount, request.price());
         productRepository.save(product);
+    }
+
+    public void updateOptionById(UserAccount userAccount, Long id, OptionUpdateRequest request) {
+        ProductOption option = optionRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 상품입니다."));
+
+        if (!option.getCreatedBy().equals(userAccount)) {
+            throw new PermissionDeniedException("해당 상품에 대한 권한이 없습니다.");
+        }
+
+        option
+                .updateName(userAccount, request.name())
+                .updatePrice(userAccount, request.price());
+        optionRepository.save(option);
     }
 
     private static ProductListItemDTO toProductListItemDTO(Product product) {

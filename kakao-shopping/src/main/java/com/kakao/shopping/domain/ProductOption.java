@@ -83,27 +83,31 @@ public class ProductOption {
         return Objects.hash(id);
     }
 
-    public void updateProduct(UserAccount userAccount, Product product) {
+    public ProductOption updateProduct(UserAccount userAccount, Product product) {
         this.product = product;
         this.modifiedAt = LocalDateTime.now();
         this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void updateName(UserAccount userAccount, String name) {
+    public ProductOption updateName(UserAccount userAccount, String name) {
         this.name = name;
         this.modifiedAt = LocalDateTime.now();
         this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void updatePrice(UserAccount userAccount, Long price) {
+    public ProductOption updatePrice(UserAccount userAccount, Long price) {
         this.price = price;
         this.modifiedAt = LocalDateTime.now();
         this.modifiedBy = userAccount;
+        return this;
     }
 
-    public void updateStock(UserAccount userAccount, Long stock) {
+    public ProductOption updateStock(UserAccount userAccount, Long stock) {
         this.stock = stock;
         this.modifiedAt = LocalDateTime.now();
         this.modifiedBy = userAccount;
+        return this;
     }
 }
