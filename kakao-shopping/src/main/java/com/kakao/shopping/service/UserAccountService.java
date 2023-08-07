@@ -1,6 +1,7 @@
 package com.kakao.shopping.service;
 
 import com.kakao.shopping._core.errors.exception.PasswordMismatchException;
+import com.kakao.shopping._core.security.CustomUserDetails;
 import com.kakao.shopping._core.security.JwtTokenProvider;
 import com.kakao.shopping.domain.UserAccount;
 import com.kakao.shopping.dto.user.UserLoginRequest;
@@ -9,7 +10,6 @@ import com.kakao.shopping.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,12 +26,9 @@ public class UserAccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserAccount userAccount = userAccountRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
-        return User.builder()
-                .username(userAccount.getEmail())
-                .password(userAccount.getPassword())
-                .roles(userAccount.getRoles())
-                .build();
+        UserAccount userAccount = userAccountRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+        return new CustomUserDetails(userAccount);
     }
 
     public UserAccount register(UserRegisterRequest request) throws InvalidPropertiesFormatException, DuplicateKeyException {
@@ -55,9 +52,8 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public String login(UserLoginRequest request) throws PasswordMismatchException {
-        UserAccount userAccount = userAccountRepository.findByEmail(request.email()).orElseThrow(
-                () -> new UsernameNotFoundException("등록되지 않은 이메일 입니다.")
-        );
+        UserAccount userAccount = userAccountRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UsernameNotFoundException("등록되지 않은 이메일 입니다."));
 
         if (!passwordEncoder.matches(request.password(), userAccount.getPassword())) {
             throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
