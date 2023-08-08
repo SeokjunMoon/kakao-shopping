@@ -46,9 +46,8 @@ public class OrderService {
     }
 
     private OrderDetail getOrderDetail(Long orderId, UserAccount userAccount) {
-        OrderDetail orderDetail = orderDetailRepository.findById(orderId).orElseThrow(
-                () -> new ObjectNotFoundException("존재하지 않는 주문입니다.")
-        );
+        OrderDetail orderDetail = orderDetailRepository.findById(orderId)
+                .orElseThrow(() -> new ObjectNotFoundException("존재하지 않는 주문입니다."));
 
         if (!orderDetail.getUserAccount().equals(userAccount)) {
             throw new BadRequestException("접근할 수 없는 주문내역 입니다.");
@@ -57,12 +56,11 @@ public class OrderService {
     }
 
     private static void checkStock(List<Cart> carts) {
-        carts
-                .forEach(cart -> {
-                    if (cart.getProductOption().getStock() < cart.getQuantity()) {
-                        throw new OutOfStockException("재고가 부족합니다.");
-                    }
-                });
+        carts.forEach(cart -> {
+            if (cart.getProductOption().getStock() < cart.getQuantity()) {
+                throw new OutOfStockException("재고가 부족합니다.");
+            }
+        });
     }
 
     private static List<OrderItem> getOrderItems(List<Cart> carts, OrderDetail orderDetail) {

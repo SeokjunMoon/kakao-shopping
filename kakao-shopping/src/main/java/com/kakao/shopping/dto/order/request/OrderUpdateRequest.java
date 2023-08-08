@@ -1,4 +1,4 @@
-package com.kakao.shopping.dto.order;
+package com.kakao.shopping.dto.order.request;
 
 public record OrderUpdateRequest(
         Long orderId,

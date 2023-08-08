@@ -3,7 +3,7 @@ package com.kakao.shopping.controller;
 import com.kakao.shopping._core.security.CustomUserDetails;
 import com.kakao.shopping._core.utils.ApiUtils;
 import com.kakao.shopping.dto.order.OrderDTO;
-import com.kakao.shopping.dto.order.OrderUpdateRequest;
+import com.kakao.shopping.dto.order.request.OrderUpdateRequest;
 import com.kakao.shopping.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
