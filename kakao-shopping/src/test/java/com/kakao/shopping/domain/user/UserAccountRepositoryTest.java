@@ -76,4 +76,7 @@ public class UserAccountRepositoryTest {
                 .extracting("name")
                 .isEqualTo("two");
     }
+
+    // UserAcount는 삭제하지 않는다
+    // 주문 기록 또한 데이터 삭제는 발생하지 않음
 }
