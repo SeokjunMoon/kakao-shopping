@@ -1,9 +1,6 @@
 package com.kakao.shopping._core.errors;
 
-import com.kakao.shopping._core.errors.exception.BadRequestException;
-import com.kakao.shopping._core.errors.exception.PasswordMismatchException;
-import com.kakao.shopping._core.errors.exception.PermissionDeniedException;
-import com.kakao.shopping._core.errors.exception.UnauthorizedRequestException;
+import com.kakao.shopping._core.errors.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,11 +12,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.body(), exception.status());
     }
 
-    @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<?> passwordMismatch(PasswordMismatchException exception) {
-        return new ResponseEntity<>(exception.body(), exception.status());
-    }
-
     @ExceptionHandler(PermissionDeniedException.class)
     public ResponseEntity<?> permissionDenied(PermissionDeniedException exception) {
         return new ResponseEntity<>(exception.body(), exception.status());
@@ -27,6 +19,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedRequestException.class)
     public ResponseEntity<?> unauthorized(UnauthorizedRequestException exception) {
+        return new ResponseEntity<>(exception.body(), exception.status());
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<?> invalidFormat(InvalidFormatException exception) {
+        return new ResponseEntity<>(exception.body(), exception.status());
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<?> objectNotFound(ObjectNotFoundException exception) {
+        return new ResponseEntity<>(exception.body(), exception.status());
+    }
+
+    @ExceptionHandler(OutOfStockException.class)
+    public ResponseEntity<?> outOfStock(OutOfStockException exception) {
         return new ResponseEntity<>(exception.body(), exception.status());
     }
 }
