@@ -103,7 +103,6 @@ public class CartService {
                             .userAccount(userAccount)
                             .productOption(option)
                             .quantity(0L)
-                            .price(0L)
                             .build();
                 });
     }

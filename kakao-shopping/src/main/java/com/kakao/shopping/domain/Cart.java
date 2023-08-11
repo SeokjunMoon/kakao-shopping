@@ -29,12 +29,12 @@ public class Cart {
     }
 
     @Builder
-    public Cart(Long id, UserAccount userAccount, ProductOption productOption, Long quantity, Long price) {
+    public Cart(Long id, UserAccount userAccount, ProductOption productOption, Long quantity) {
         this.id = id;
         this.userAccount = userAccount;
         this.productOption = productOption;
         this.quantity = quantity;
-        this.price = price;
+        this.price = productOption.getPrice() * quantity;
     }
 
     @Override
