@@ -1,9 +1,11 @@
 package com.kakao.shopping._core.utils;
 
+import com.kakao.shopping.domain.Cart;
 import com.kakao.shopping.domain.ProductOption;
 import com.kakao.shopping.domain.Product;
 import com.kakao.shopping.domain.UserAccount;
 import com.kakao.shopping.dto.user.UserRegisterRequest;
+import com.kakao.shopping.repository.CartRepository;
 import com.kakao.shopping.repository.OptionRepository;
 import com.kakao.shopping.repository.ProductRepository;
 import com.kakao.shopping.service.UserAccountService;
@@ -21,14 +23,21 @@ public class initDataGenerator implements ApplicationRunner {
     private final UserAccountService userAccountService;
     private final ProductRepository productRepository;
     private final OptionRepository optionRepository;
+    private final CartRepository cartRepository;
     List<Product> products;
     List<ProductOption> productOptions;
     UserAccount testUser;
 
-    public initDataGenerator(UserAccountService userAccountService, ProductRepository productRepository, OptionRepository optionRepository) {
+    public initDataGenerator(
+            UserAccountService userAccountService,
+            ProductRepository productRepository,
+            OptionRepository optionRepository,
+            CartRepository cartRepository
+    ) {
         this.userAccountService = userAccountService;
         this.productRepository = productRepository;
         this.optionRepository = optionRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Profile("local")
@@ -37,6 +46,7 @@ public class initDataGenerator implements ApplicationRunner {
         createUser();
         createProduct();
         createOption();
+        createCart();
     }
 
     private void createUser() throws InvalidPropertiesFormatException {
@@ -119,6 +129,15 @@ public class initDataGenerator implements ApplicationRunner {
                         ProductOption.of(products.get(13), "[특품] 샤인머스켓 2kg 2-3수", 23900L, testUser),
                         ProductOption.of(products.get(14), "화이트", 148000L, testUser),
                         ProductOption.of(products.get(14), "블랙", 14800L, testUser)
+                )
+        );
+    }
+
+    private void createCart() {
+        cartRepository.saveAll(
+                List.of(
+                        Cart.builder().userAccount(testUser).productOption(this.productOptions.get(0)).quantity(5L).build(),
+                        Cart.builder().userAccount(testUser).productOption(this.productOptions.get(1)).quantity(5L).build()
                 )
         );
     }
