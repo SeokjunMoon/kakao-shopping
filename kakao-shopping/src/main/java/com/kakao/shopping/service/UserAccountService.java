@@ -30,7 +30,7 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public UserAccount register(UserRegisterRequest request) {
-        FormatChecker formatChecker = new FormatChecker(request.name(), request.email(), request.password());
+        FormatChecker formatChecker = new FormatChecker(request);
         formatChecker.execute();
 
         try {
@@ -49,7 +49,7 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public String login(UserLoginRequest request) {
-        FormatChecker formatChecker = new FormatChecker(request.email(), request.password());
+        FormatChecker formatChecker = new FormatChecker(request);
         formatChecker.execute();
 
         UserAccount userAccount = userAccountRepository.findByEmail(request.email())

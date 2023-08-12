@@ -2,6 +2,8 @@ package com.kakao.shopping._core.utils;
 
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.InvalidFormatException;
+import com.kakao.shopping.dto.user.UserLoginRequest;
+import com.kakao.shopping.dto.user.UserRegisterRequest;
 
 public class FormatChecker {
     enum TYPE {REGISTER, LOGIN};
@@ -10,18 +12,18 @@ public class FormatChecker {
     private final String password;
     private final TYPE type;
 
-    public FormatChecker(String name, String email, String password) {
+    public FormatChecker(UserRegisterRequest request) {
         this.type = TYPE.REGISTER;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+        this.name = request.name();
+        this.email = request.email();
+        this.password = request.password();
     }
 
-    public FormatChecker(String email, String password) {
+    public FormatChecker(UserLoginRequest request) {
         this.type = TYPE.LOGIN;
-        this.email = email;
+        this.email = request.email();
         this.name = null;
-        this.password = password;
+        this.password = request.password();
     }
 
     public void execute() {
