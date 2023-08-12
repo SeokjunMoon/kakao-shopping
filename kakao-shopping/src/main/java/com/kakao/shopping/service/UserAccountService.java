@@ -34,14 +34,7 @@ public class UserAccountService implements UserDetailsService {
         formatChecker.execute();
 
         try {
-            return userAccountRepository.save(
-                    UserAccount.builder()
-                            .name(request.name())
-                            .email(request.email())
-                            .password(passwordEncoder.encode(request.password()))
-                            .birthdate(request.birthdate())
-                            .build()
-            );
+            return userAccountRepository.save(toEntity(request));
         }
         catch (DataIntegrityViolationException error) {
             throw new BadRequestException("중복된 email 입니다.");
@@ -60,5 +53,14 @@ public class UserAccountService implements UserDetailsService {
         }
 
         return JwtTokenProvider.create(userAccount);
+    }
+
+    private UserAccount toEntity(UserRegisterRequest request) {
+        return UserAccount.builder()
+                .name(request.name())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .birthdate(request.birthdate())
+                .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.kakao.shopping.domain;
 
+import com.kakao.shopping.dto.product.request.ProductInsertRequest;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -57,6 +58,10 @@ public class Product {
 
     public static Product of(String name, String description, String image, Long price, UserAccount userAccount) {
         return new Product(name, description, image, price, userAccount);
+    }
+
+    public static Product of(ProductInsertRequest request, UserAccount userAccount) {
+        return new Product(request.name(), request.description(), request.image(), request.price(), userAccount);
     }
 
     @Override

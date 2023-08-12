@@ -1,5 +1,6 @@
 package com.kakao.shopping.domain;
 
+import com.kakao.shopping.dto.product.option.request.OptionInsertRequest;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
@@ -69,6 +70,10 @@ public class ProductOption {
 
     public static ProductOption of(Product product, String name, Long price, UserAccount userAccount) {
         return new ProductOption(product, name, price, userAccount);
+    }
+
+    public static ProductOption of(OptionInsertRequest request, UserAccount userAccount) {
+        return new ProductOption(request.product(), request.name(), request.price(), userAccount);
     }
 
     @Override
