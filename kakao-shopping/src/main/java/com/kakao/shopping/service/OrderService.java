@@ -3,7 +3,7 @@ package com.kakao.shopping.service;
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.ObjectNotFoundException;
 import com.kakao.shopping._core.errors.exception.OutOfStockException;
-import com.kakao.shopping._core.utils.PriceCalculator;
+import com.kakao.shopping._core.utils.OrderPriceCalculator;
 import com.kakao.shopping.domain.*;
 import com.kakao.shopping.dto.order.OrderDTO;
 import com.kakao.shopping.dto.order.OrderItemDTO;
@@ -81,7 +81,8 @@ public class OrderService {
                 })
                 .toList();
 
-        Long totalPrice = PriceCalculator.calculateOrder(items);
+        OrderPriceCalculator calculator = new OrderPriceCalculator(items);
+        Long totalPrice = calculator.execute();
         return new OrderDTO(orderId, orderProducts, totalPrice);
     }
 

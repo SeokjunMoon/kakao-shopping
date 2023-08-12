@@ -2,7 +2,7 @@ package com.kakao.shopping.service;
 
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.ObjectNotFoundException;
-import com.kakao.shopping._core.utils.PriceCalculator;
+import com.kakao.shopping._core.utils.CartPriceCalculator;
 import com.kakao.shopping.domain.Cart;
 import com.kakao.shopping.domain.Product;
 import com.kakao.shopping.domain.ProductOption;
@@ -29,7 +29,8 @@ public class CartService {
 
     public CartDTO findAll(UserAccount user) {
         List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(user.getId()).orElse(null);
-        Long totalPrice = PriceCalculator.calculateCart(carts);
+        CartPriceCalculator calculator = new CartPriceCalculator(carts);
+        Long totalPrice = calculator.execute();
         List<CartProductDTO> products = getCartProductDTOS(carts);
         return new CartDTO(products, totalPrice);
     }
@@ -85,7 +86,8 @@ public class CartService {
                 .toList();
 
         cartRepository.saveAll(carts);
-        Long totalPrice = PriceCalculator.calculateCart(carts);
+        CartPriceCalculator calculator = new CartPriceCalculator(carts);
+        Long totalPrice = calculator.execute();
         List<UpdatedCartDTO> updatedCarts = getUpdatedCartDTOS(carts);
 
         return new CartUpdateResponse(updatedCarts, totalPrice);
