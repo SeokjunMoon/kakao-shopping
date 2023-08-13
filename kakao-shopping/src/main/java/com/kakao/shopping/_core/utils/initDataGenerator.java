@@ -49,7 +49,7 @@ public class initDataGenerator implements ApplicationRunner {
         createCart();
     }
 
-    private void createUser() throws InvalidPropertiesFormatException {
+    private void createUser() {
         UserRegisterRequest request = new UserRegisterRequest(
                 "moon", "moon@naver.com", "qwer1234!", LocalDate.of(2000, 9, 15)
         );
