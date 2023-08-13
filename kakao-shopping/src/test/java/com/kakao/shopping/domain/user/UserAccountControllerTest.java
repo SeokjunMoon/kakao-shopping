@@ -32,7 +32,7 @@ public class UserAccountControllerTest {
         this.objectMapper = objectMapper;
     }
 
-    @DisplayName("TEST : POST /join : success")
+    @DisplayName("POST /join : success")
     @Test
     public void register_success_test() throws Exception {
         // given
@@ -47,7 +47,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("true"));
     }
 
-    @DisplayName("TEST : POST /join : fail - invalid email format")
+    @DisplayName("POST /join : fail - invalid email format")
     @Test
     public void register_fail_test_invalid_email_format() throws Exception {
         // given
@@ -62,7 +62,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - invalid password length")
+    @DisplayName("POST /join : fail - invalid password length")
     @Test
     public void register_fail_test_invalid_password_length() throws Exception {
         // given
@@ -77,7 +77,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - invalid password format - 특수기호 누락")
+    @DisplayName("POST /join : fail - invalid password format - 특수기호 누락")
     @Test
     public void register_fail_test_invalid_password_format() throws Exception {
         // given
@@ -92,7 +92,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - invalid password format - 숫자 누락")
+    @DisplayName("POST /join : fail - invalid password format - 숫자 누락")
     @Test
     public void register_fail_test_invalid_password_format2() throws Exception {
         // given
@@ -107,7 +107,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - invalid password format - 영문자 누락")
+    @DisplayName("POST /join : fail - invalid password format - 영문자 누락")
     @Test
     public void register_fail_test_invalid_password_format3() throws Exception {
         // given
@@ -122,7 +122,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - email already exist")
+    @DisplayName("POST /join : fail - email already exist")
     @Test
     public void register_fail_test_email_already_exist() throws Exception {
         // given
@@ -137,7 +137,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - name 누락")
+    @DisplayName("POST /join : fail - name 누락")
     @Test
     public void register_fail_test_missing_name() throws Exception {
         // given
@@ -152,7 +152,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - email 누락")
+    @DisplayName("POST /join : fail - email 누락")
     @Test
     public void register_fail_test_missing_email() throws Exception {
         // given
@@ -167,7 +167,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /join : fail - password 누락")
+    @DisplayName("POST /join : fail - password 누락")
     @Test
     public void register_fail_test_missing_password() throws Exception {
         // given
@@ -182,7 +182,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /login : success")
+    @DisplayName("POST /login : success")
     @Test
     public void login_success_test() throws Exception {
         // given
@@ -195,7 +195,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("true"));
     }
 
-    @DisplayName("TEST : POST /login : fail - 존재하지 않는 이메일")
+    @DisplayName("POST /login : fail - 존재하지 않는 이메일")
     @Test
     public void login_success_fail_test_email_not_exist() throws Exception {
         // given
@@ -208,7 +208,7 @@ public class UserAccountControllerTest {
         resultActions.andExpect(jsonPath("$.success").value("false"));
     }
 
-    @DisplayName("TEST : POST /login : fail - 비밀번호 불일치")
+    @DisplayName("POST /login : fail - 비밀번호 불일치")
     @Test
     public void login_success_fail_test_password_mismatch() throws Exception {
         // given
