@@ -31,14 +31,14 @@ public class ProductService {
         return productRepository.findAll(pageRequest)
                 .getContent()
                 .stream()
-                .map(ProductService::toDto)
+                .map(ProductService::toDTO)
                 .toList();
     }
 
     public ProductDTO findProductById(Long id) {
         List<ProductOption> productOptions = getProductOptionsById(id);
         Product product = productOptions.get(0).getProduct();
-        List<ProductOptionDTO> options = toDto(productOptions);
+        List<ProductOptionDTO> options = toDTO(productOptions);
         return new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getImage(), product.getPrice(), product.getStarCount(), options);
     }
 
@@ -86,7 +86,7 @@ public class ProductService {
 
     // ------------------------------------------------------------------------------------------
 
-    private static ProductListItemDTO toDto(Product product) {
+    private static ProductListItemDTO toDTO(Product product) {
         return new ProductListItemDTO(
                 product.getId(),
                 product.getName(),
@@ -95,6 +95,12 @@ public class ProductService {
                 product.getPrice(),
                 product.getStarCount()
         );
+    }
+
+    private static List<ProductOptionDTO> toDTO(List<ProductOption> productOptions) {
+        return productOptions.stream()
+                .map(productOption -> new ProductOptionDTO(productOption.getId(), productOption.getName(), productOption.getPrice(), productOption.getStock()))
+                .toList();
     }
 
     private List<ProductOption> getProductOptionsById(Long id) {
@@ -108,12 +114,6 @@ public class ProductService {
             throw new BadRequestException("상품이 존재하지 않습니다.");
         }
         return productOptions;
-    }
-
-    private static List<ProductOptionDTO> toDto(List<ProductOption> productOptions) {
-        return productOptions.stream()
-                .map(productOption -> new ProductOptionDTO(productOption.getId(), productOption.getName(), productOption.getPrice(), productOption.getStock()))
-                .toList();
     }
 
     private ProductOption getProductOptionById(Long request, UserAccount userAccount) {
