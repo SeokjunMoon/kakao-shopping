@@ -1,10 +1,10 @@
-package com.kakao.shopping._core.utils;
+package com.kakao.shopping._core.utils.calculator;
 
 import com.kakao.shopping.domain.Cart;
 
 import java.util.List;
 
-public class CartPriceCalculator {
+public class CartPriceCalculator implements PriceCalculator {
     private final List<Cart> carts;
 
     public CartPriceCalculator(List<Cart> carts) {

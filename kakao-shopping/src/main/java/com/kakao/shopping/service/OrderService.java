@@ -3,12 +3,14 @@ package com.kakao.shopping.service;
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.ObjectNotFoundException;
 import com.kakao.shopping._core.errors.exception.OutOfStockException;
-import com.kakao.shopping._core.utils.OrderPriceCalculator;
+import com.kakao.shopping._core.utils.calculator.OrderPriceCalculator;
+import com.kakao.shopping._core.utils.calculator.PriceCalculator;
 import com.kakao.shopping.domain.*;
 import com.kakao.shopping.dto.order.OrderDTO;
 import com.kakao.shopping.dto.order.OrderItemDTO;
 import com.kakao.shopping.dto.order.OrderProductDTO;
 import com.kakao.shopping.repository.CartRepository;
+import com.kakao.shopping.repository.OptionRepository;
 import com.kakao.shopping.repository.OrderDetailRepository;
 import com.kakao.shopping.repository.OrderItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
     private final OrderItemRepository orderItemRepository;
     private final CartRepository cartRepository;
+    private final OptionRepository optionRepository;
 
     public OrderDTO findById(Long orderId, UserAccount userAccount) {
         OrderDetail orderDetail = getOrderDetail(orderId, userAccount);
@@ -33,15 +36,23 @@ public class OrderService {
 
     @Transactional
     public OrderDTO save(UserAccount userAccount) {
-        List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId()).orElseThrow();
-        if (carts.isEmpty()) throw new BadRequestException("장바구니가 비어있습니다.");
+        List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId())
+                .orElseThrow(() -> new BadRequestException("장바구니가 비어있습니다."));
 
         checkStock(carts);
         cartRepository.deleteAll(carts);
 
+        carts.forEach(cart -> {
+            ProductOption option = cart.getProductOption();
+            Long stock = option.getStock() - cart.getQuantity();
+            option.updateStock(userAccount, stock);
+            optionRepository.save(option);
+        });
+
         OrderDetail orderDetail = orderDetailRepository.save(OrderDetail.of(userAccount));
         List<OrderItem> items = getOrderItems(carts, orderDetail);
 
+        orderItemRepository.saveAll(items);
         return toDTO(orderDetail.getId(), items);
     }
 
@@ -70,7 +81,7 @@ public class OrderService {
                 .toList();
     }
 
-    private OrderDTO toDTO(Long orderId, List<OrderItem> items) {
+    private static OrderDTO toDTO(Long orderId, List<OrderItem> items) {
         List<OrderProductDTO> orderProducts = items
                 .stream()
                 .map(orderItem -> orderItem.getProductOption().getProduct())
@@ -81,7 +92,7 @@ public class OrderService {
                 })
                 .toList();
 
-        OrderPriceCalculator calculator = new OrderPriceCalculator(items);
+        PriceCalculator calculator = new OrderPriceCalculator(items);
         Long totalPrice = calculator.execute();
         return new OrderDTO(orderId, orderProducts, totalPrice);
     }
