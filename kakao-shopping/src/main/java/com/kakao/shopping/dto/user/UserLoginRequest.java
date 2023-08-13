@@ -1,7 +1,9 @@
 package com.kakao.shopping.dto.user;
 
+import javax.validation.constraints.Email;
+
 public record UserLoginRequest(
-        String email,
+        @Email String email,
         String password
 ) {
 }

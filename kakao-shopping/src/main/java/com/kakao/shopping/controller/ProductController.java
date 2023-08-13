@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class ProductController {
 //    public ResponseEntity<?> insertProduct()
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable @Min(1) Long id) {
         ProductDTO product = productService.findProductById(id);
         return ResponseEntity.ok(ApiUtils.success(product));
     }
@@ -49,7 +50,7 @@ public class ProductController {
 
     @PutMapping("/product/{id}")
     public ResponseEntity<?> updateProductById(
-            @PathVariable Long id,
+            @PathVariable @Min(1) Long id,
             @RequestBody ProductUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
@@ -59,7 +60,7 @@ public class ProductController {
 
     @PutMapping("/product/option/{id}")
     public ResponseEntity<?> updateProductOptionById(
-            @PathVariable Long id,
+            @PathVariable @Min(1) Long id,
             @RequestBody OptionUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
