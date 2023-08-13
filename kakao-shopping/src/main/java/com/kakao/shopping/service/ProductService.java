@@ -66,22 +66,25 @@ public class ProductService {
         );
     }
 
-    public void updateStockById(UserAccount userAccount, OptionStockUpdateRequest request) {
+    public ProductOptionDTO updateStockById(UserAccount userAccount, OptionStockUpdateRequest request) {
         ProductOption option = getProductOptionById(request.optionId(), userAccount);
         option.updateStock(userAccount, request.stock());
-        optionRepository.save(option);
+        ProductOption updatedOption = optionRepository.save(option);
+        return toDTO(List.of(updatedOption)).get(0);
     }
 
-    public void updateProductById(UserAccount userAccount, Long id, ProductUpdateRequest request) {
+    public ProductListItemDTO updateProductById(UserAccount userAccount, Long id, ProductUpdateRequest request) {
         Product product = getProductById(userAccount, id);
         update(userAccount, request, product);
-        productRepository.save(product);
+        Product updatedProduct = productRepository.save(product);
+        return toDTO(updatedProduct);
     }
 
-    public void updateOptionById(UserAccount userAccount, Long id, OptionUpdateRequest request) {
+    public ProductOptionDTO updateOptionById(UserAccount userAccount, Long id, OptionUpdateRequest request) {
         ProductOption option = getProductOptionById(id, userAccount);
         update(userAccount, request, option);
-        optionRepository.save(option);
+        ProductOption updatedOption = optionRepository.save(option);
+        return toDTO(List.of(updatedOption)).get(0);
     }
 
     // ------------------------------------------------------------------------------------------

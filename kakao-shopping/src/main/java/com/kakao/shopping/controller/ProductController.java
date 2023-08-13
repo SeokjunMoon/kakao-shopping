@@ -4,6 +4,7 @@ import com.kakao.shopping._core.security.CustomUserDetails;
 import com.kakao.shopping._core.utils.ApiUtils;
 import com.kakao.shopping.dto.product.ProductDTO;
 import com.kakao.shopping.dto.product.ProductListItemDTO;
+import com.kakao.shopping.dto.product.option.ProductOptionDTO;
 import com.kakao.shopping.dto.product.request.OptionStockUpdateRequest;
 import com.kakao.shopping.dto.product.request.OptionUpdateRequest;
 import com.kakao.shopping.dto.product.request.ProductUpdateRequest;
@@ -42,8 +43,8 @@ public class ProductController {
             @RequestBody OptionStockUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        productService.updateStockById(userDetails.getUserAccount(), request);
-        return ResponseEntity.ok().body(ApiUtils.success(null));
+        ProductOptionDTO optionDTOS = productService.updateStockById(userDetails.getUserAccount(), request);
+        return ResponseEntity.ok().body(ApiUtils.success(optionDTOS));
     }
 
     @PutMapping("/product/{id}")
@@ -52,8 +53,8 @@ public class ProductController {
             @RequestBody ProductUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        productService.updateProductById(userDetails.getUserAccount(), id, request);
-        return ResponseEntity.ok().body(ApiUtils.success(null));
+        ProductListItemDTO productDTO = productService.updateProductById(userDetails.getUserAccount(), id, request);
+        return ResponseEntity.ok().body(ApiUtils.success(productDTO));
     }
 
     @PutMapping("/product/option/{id}")
@@ -62,7 +63,7 @@ public class ProductController {
             @RequestBody OptionUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        productService.updateOptionById(userDetails.getUserAccount(), id, request);
-        return ResponseEntity.ok().body(ApiUtils.success(null));
+        ProductOptionDTO optionDTO = productService.updateOptionById(userDetails.getUserAccount(), id, request);
+        return ResponseEntity.ok().body(ApiUtils.success(optionDTO));
     }
 }
