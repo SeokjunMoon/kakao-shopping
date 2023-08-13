@@ -40,14 +40,13 @@ public class CartService {
 
     @Transactional
     public void addCartList(List<CartInsertRequest> requests, UserAccount userAccount) {
-        List<Long> ids = getCartIds(requests);
+        List<Long> ids = requests.stream().map(CartInsertRequest::optionId).distinct().toList();
+        checkRequestValidation(requests.size(), ids.size());
+
         List<ProductOption> options = optionRepository.findAllById(ids);
         List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId()).orElse(null);
 
         requests.forEach(request -> {
-            if (request.quantity() < 0) {
-                throw new BadRequestException("잘못된 요청입니다. 수량은 음수가 될 수 없습니다.");
-            }
             Cart cart = getCartById(userAccount, options, savedCarts, request.optionId());
             Long quantity = cart.getQuantity() + request.quantity();
             cart.updateQuantity(quantity);
@@ -57,7 +56,8 @@ public class CartService {
 
     @Transactional
     public CartUpdateResponse update(List<CartUpdateRequest> requests, UserAccount user) {
-        checkRequestValidation(requests);
+        List<Long> ids = requests.stream().map(CartUpdateRequest::cartId).distinct().toList();
+        checkRequestValidation(requests.size(), ids.size());
 
         List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(user.getId())
                 .orElseThrow(() -> new ObjectNotFoundException("장바구니가 비어있습니다."));
@@ -67,16 +67,13 @@ public class CartService {
                 .map(request -> {
                     Cart cart = getCartById(savedCarts, request.cartId());
                     Long quantity = request.quantity();
-                    if (quantity <= 0) {
-                        throw new BadRequestException("잘못된 요청입니다. 수량은 음수가 될 수 없습니다.");
-                    }
                     cart.updateQuantity(quantity);
                     return cart;
                 })
                 .toList();
         cartRepository.saveAll(carts);
 
-        CartPriceCalculator calculator = new CartPriceCalculator(carts);
+        PriceCalculator calculator = new CartPriceCalculator(carts);
         Long totalPrice = calculator.execute();
 
         List<UpdatedCartDTO> updatedCarts = toUpdatedCartDTO(carts);
@@ -85,18 +82,9 @@ public class CartService {
 
     // ------------------------------------------------------------------------------------------
 
-    private static List<Long> getCartIds(List<CartInsertRequest> requests) {
-        List<Long> ids = requests.stream().map(CartInsertRequest::optionId).distinct().toList();
-        if (ids.size() != requests.size()) {
-            throw new BadRequestException("잘못된 요청입니다. 요청에서 중복이 발생하였습니다.");
-        }
-        return ids;
-    }
-
-    private static void checkRequestValidation(List<CartUpdateRequest> requests) {
-        List<Long> ids = requests.stream().map(CartUpdateRequest::cartId).distinct().toList();
-        if (ids.size() != requests.size()) {
-            throw new BadRequestException("잘못된 요청입니다. 요청에서 중복이 발생하였습니다.");
+    private static void checkRequestValidation(int requestCount, int idCount) {
+        if (!Objects.equals(requestCount, idCount)) {
+            throw new BadRequestException("잘못된 요청입니다. 요청에서 중복이 발생했습니다.");
         }
     }
 
