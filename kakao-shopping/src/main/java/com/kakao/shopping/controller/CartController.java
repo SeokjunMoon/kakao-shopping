@@ -23,7 +23,6 @@ public class CartController {
 
     @GetMapping("/cart")
     public ResponseEntity<?> findAll(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        System.out.println("userId = " + userDetails.getUserAccount().getId());
         CartDTO carts = cartService.findAll(userDetails.getUserAccount());
         return ResponseEntity.ok(ApiUtils.success(carts));
     }

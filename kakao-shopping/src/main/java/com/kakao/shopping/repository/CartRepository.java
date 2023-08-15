@@ -11,13 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-//    @Query("select c " +
-//            "from Cart c " +
-//            "join fetch c.userAccount " +
-//            "join fetch c.productOption o " +
-//            "join fetch o.product " +
-//            "where c.userAccount.id = :userId " +
-//            "order by c.productOption.id asc")
     @EntityGraph("CartWithUserAccountAndOptionAndProduct")
     Optional<List<Cart>> findAllByUserAccountId(Long userId);
 }
