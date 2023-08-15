@@ -30,7 +30,7 @@ public class CartService {
     private final OptionRepository optionRepository;
 
     public CartDTO findAll(UserAccount user) {
-        List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(user.getId()).orElse(null);
+        List<Cart> carts = cartRepository.findAllByUserAccountId(user.getId()).orElse(null);
 
         PriceCalculator calculator = new CartPriceCalculator(carts);
         Long totalPrice = calculator.execute();
@@ -45,7 +45,7 @@ public class CartService {
         checkRequestValidation(requests.size(), ids.size());
 
         List<ProductOption> options = optionRepository.findAllByIdIn(ids);
-        List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId()).orElse(null);
+        List<Cart> savedCarts = cartRepository.findAllByUserAccountId(userAccount.getId()).orElse(null);
 
         requests.forEach(request -> {
             Cart cart = getCartById(userAccount, options, savedCarts, request.optionId());
@@ -60,7 +60,7 @@ public class CartService {
         List<Long> ids = requests.stream().map(CartUpdateRequest::cartId).distinct().toList();
         checkRequestValidation(requests.size(), ids.size());
 
-        List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(user.getId())
+        List<Cart> savedCarts = cartRepository.findAllByUserAccountId(user.getId())
                 .orElseThrow(() -> new ObjectNotFoundException("장바구니가 비어있습니다."));
 
         List<Cart> carts = requests

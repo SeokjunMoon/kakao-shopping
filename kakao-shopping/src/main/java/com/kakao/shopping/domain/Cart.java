@@ -7,6 +7,28 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "CartWithUserAccountAndOption",
+                attributeNodes = {
+                        @NamedAttributeNode("userAccount"),
+                        @NamedAttributeNode("productOption")
+                }
+        ),
+        @NamedEntityGraph(
+                name = "CartWithUserAccountAndOptionAndProduct",
+                attributeNodes = {
+                        @NamedAttributeNode("userAccount"),
+                        @NamedAttributeNode(value = "productOption", subgraph = "optionSubgraph"),
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "optionSubgraph",
+                                attributeNodes = @NamedAttributeNode("product")
+                        )
+                }
+        )
+})
 @Entity
 public class Cart {
     @Id

@@ -36,7 +36,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO save(UserAccount userAccount) {
-        List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId())
+        List<Cart> carts = cartRepository.findAllByUserAccountId(userAccount.getId())
                 .orElseThrow(() -> new BadRequestException("장바구니가 비어있습니다."));
 
         checkStock(carts);
