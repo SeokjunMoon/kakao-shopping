@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
+@NamedEntityGraph(
+        name = "ProductWithCreatedBy",
+        attributeNodes = @NamedAttributeNode("createdBy")
+)
 @Entity
 public class Product {
     @Id

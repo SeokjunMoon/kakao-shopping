@@ -3,19 +3,25 @@ package com.kakao.shopping.domain;
 import com.kakao.shopping.dto.product.option.request.OptionInsertRequest;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
-@NamedEntityGraph(
-        name = "OptionWithProduct",
-        attributeNodes = @NamedAttributeNode("product")
-)
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "OptionWithProduct",
+                attributeNodes = @NamedAttributeNode("product")
+        ),
+        @NamedEntityGraph(
+                name = "OptionWithProductAndCreatedBy",
+                attributeNodes = {
+                        @NamedAttributeNode("product"),
+                        @NamedAttributeNode("createdBy")
+                }
+        )
+})
 @Entity
 public class ProductOption {
     @Id

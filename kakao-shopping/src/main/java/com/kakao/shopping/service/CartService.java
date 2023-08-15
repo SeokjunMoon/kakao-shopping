@@ -2,6 +2,7 @@ package com.kakao.shopping.service;
 
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.errors.exception.ObjectNotFoundException;
+import com.kakao.shopping._core.errors.exception.PermissionDeniedException;
 import com.kakao.shopping._core.utils.calculator.CartPriceCalculator;
 import com.kakao.shopping._core.utils.calculator.PriceCalculator;
 import com.kakao.shopping.domain.Cart;
@@ -43,7 +44,7 @@ public class CartService {
         List<Long> ids = requests.stream().map(CartInsertRequest::optionId).distinct().toList();
         checkRequestValidation(requests.size(), ids.size());
 
-        List<ProductOption> options = optionRepository.findAllById(ids);
+        List<ProductOption> options = optionRepository.findAllByIdIn(ids);
         List<Cart> savedCarts = cartRepository.findByUserIdOrderByOptionIdAsc(userAccount.getId()).orElse(null);
 
         requests.forEach(request -> {
@@ -78,6 +79,17 @@ public class CartService {
 
         List<UpdatedCartDTO> updatedCarts = toUpdatedCartDTO(carts);
         return new CartUpdateResponse(updatedCarts, totalPrice);
+    }
+
+    public void delete(List<CartDeleteRequest> requests, UserAccount userAccount) {
+        List<Long> ids = requests.stream().map(CartDeleteRequest::cartId).toList();
+        List<Cart> carts = cartRepository.findAllById(ids);
+        carts.forEach(cart -> {
+            if (!cart.getUserAccount().equals(userAccount)) {
+                throw new PermissionDeniedException("해당 계정으로 접근할 수 없는 장바구니 입니다.");
+            }
+        });
+        cartRepository.deleteAll(carts);
     }
 
     // ------------------------------------------------------------------------------------------
@@ -148,10 +160,5 @@ public class CartService {
                 .stream()
                 .map(cart -> new UpdatedCartDTO(cart.getId(), cart.getProductOption().getId(), cart.getProductOption().getName(), cart.getQuantity(), cart.getPrice()))
                 .toList();
-    }
-
-    public void delete(List<CartDeleteRequest> requests, UserAccount userAccount) {
-        List<Long> ids = requests.stream().map(CartDeleteRequest::cartId).toList();
-        cartRepository.deleteAllById(ids);
     }
 }
