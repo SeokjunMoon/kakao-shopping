@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,19 +29,31 @@ public class CartController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<?> insert(@RequestBody List<CartInsertRequest> request, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> insert(
+            @Valid @RequestBody List<CartInsertRequest> request,
+            Errors errors,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
         cartService.addCartList(request, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 
     @PutMapping("/cart")
-    public ResponseEntity<?> update(@RequestBody List<CartUpdateRequest> request, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> update(
+            @Valid @RequestBody List<CartUpdateRequest> request,
+            Errors errors,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
         CartUpdateResponse carts = cartService.update(request, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(carts));
     }
 
     @DeleteMapping("/cart")
-    public ResponseEntity<?> delete(@RequestBody List<CartDeleteRequest> requests, Errors errors, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> delete(
+            @Valid @RequestBody List<CartDeleteRequest> requests,
+            Errors errors,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
         cartService.delete(requests, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }

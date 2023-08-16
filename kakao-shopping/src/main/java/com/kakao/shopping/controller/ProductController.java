@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class ProductController {
 
     @PutMapping("/product/stock")
     public ResponseEntity<?> updateStockById(
-            @RequestBody OptionStockUpdateRequest request,
+            @Valid @RequestBody OptionStockUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         ProductOptionDTO optionDTOS = productService.updateStockById(userDetails.getUserAccount(), request);
@@ -51,7 +52,7 @@ public class ProductController {
     @PutMapping("/product/{id}")
     public ResponseEntity<?> updateProductById(
             @PathVariable @Min(1) Long id,
-            @RequestBody ProductUpdateRequest request,
+            @Valid @RequestBody ProductUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         ProductListItemDTO productDTO = productService.updateProductById(userDetails.getUserAccount(), id, request);
@@ -61,7 +62,7 @@ public class ProductController {
     @PutMapping("/product/option/{id}")
     public ResponseEntity<?> updateProductOptionById(
             @PathVariable @Min(1) Long id,
-            @RequestBody OptionUpdateRequest request,
+            @Valid @RequestBody OptionUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         ProductOptionDTO optionDTO = productService.updateOptionById(userDetails.getUserAccount(), id, request);

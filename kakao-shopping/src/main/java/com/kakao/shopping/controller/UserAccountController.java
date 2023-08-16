@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.InvalidPropertiesFormatException;
 
 @RequiredArgsConstructor
@@ -21,13 +22,19 @@ public class UserAccountController {
     private final UserAccountService userAccountService;
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody UserRegisterRequest userRegisterRequest, Errors error, HttpServletRequest request) throws InvalidPropertiesFormatException {
+    public ResponseEntity<?> join(
+            @Valid @RequestBody UserRegisterRequest userRegisterRequest,
+            Errors error
+    ) {
         userAccountService.register(userRegisterRequest);
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest loginRequest, Errors error, HttpServletRequest request) {
+    public ResponseEntity<?> login(
+            @Valid @RequestBody UserLoginRequest loginRequest,
+            Errors error
+    ) {
         String jwtToken = userAccountService.login(loginRequest);
         return ResponseEntity
                 .ok()

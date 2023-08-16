@@ -7,6 +7,6 @@ import javax.validation.constraints.Min;
 public record OptionInsertRequest(
         Product product,
         String name,
-        @Min(0) Long price
+        @Min(value = 0, message = "가격은 0 이상의 숫자만 가능합니다.") Long price
 ) {
 }

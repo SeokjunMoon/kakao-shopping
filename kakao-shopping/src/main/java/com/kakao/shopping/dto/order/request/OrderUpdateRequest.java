@@ -3,9 +3,9 @@ package com.kakao.shopping.dto.order.request;
 import javax.validation.constraints.Min;
 
 public record OrderUpdateRequest(
-        @Min(1) Long orderId,
-        @Min(1) Long optionId,
-        @Min(1) Long quantity,
+        @Min(value = 1, message = "id는 1 이상의 숫자만 가능합니다.") Long orderId,
+        @Min(value = 1, message = "id는 1 이상의 숫자만 가능합니다.") Long optionId,
+        @Min(value = 1, message = "수량은 1 이상의 숫자만 가능합니다.") Long quantity,
         String reason
 ) {
 }

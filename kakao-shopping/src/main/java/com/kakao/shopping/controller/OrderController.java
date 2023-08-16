@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 @RequiredArgsConstructor
@@ -18,7 +19,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<?> findById(@PathVariable @Min(1) Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> findById(
+            @PathVariable @Min(1) Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
         OrderDTO order = orderService.findById(id, userDetails.getUserAccount());
         return ResponseEntity.ok().body(ApiUtils.success(order));
     }
@@ -30,7 +34,10 @@ public class OrderController {
     }
 
     @PutMapping("/order")
-    public ResponseEntity<?> update(@RequestBody OrderUpdateRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> update(
+            @Valid @RequestBody OrderUpdateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 }

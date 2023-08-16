@@ -1,7 +1,10 @@
 package com.kakao.shopping._core.errors;
 
 import com.kakao.shopping._core.errors.exception.*;
+import com.kakao.shopping._core.utils.ApiUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -35,5 +38,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OutOfStockException.class)
     public ResponseEntity<?> outOfStock(OutOfStockException exception) {
         return new ResponseEntity<>(exception.body(), exception.status());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> methodArgumentNotValid(MethodArgumentNotValidException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(ApiUtils.error(exception.getFieldError().getDefaultMessage(), status), status);
     }
 }
