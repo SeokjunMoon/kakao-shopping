@@ -56,6 +56,8 @@ public class SecurityConfig {
                 // form 로그인 해제
                 .formLogin().disable()
 
+                .httpBasic().disable()
+
                 // cors 재설정
                 .cors().configurationSource(configurationSource())
 
@@ -65,7 +67,7 @@ public class SecurityConfig {
                 // 인증 요청 URL 별로 인증 및 ROLE 설정을 한다.
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/carts/**", "/options/**", "/orders/**", "/users/**").authenticated()
+                .mvcMatchers("/cart/**", "/option/**", "/order/**", "/user/**").authenticated()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
 
@@ -78,6 +80,18 @@ public class SecurityConfig {
                 .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
                     createErrorResponse(response, new PermissionDeniedException("권한이 없습니다."));
                 })
+
+                .and()
+                .logout().logoutSuccessUrl("/")
+
+                .and()
+                .oauth2Login()
+
+                .successHandler()
+
+                .userInfoEndpoint()
+
+                .userService()
 
                 .and().build();
     }
