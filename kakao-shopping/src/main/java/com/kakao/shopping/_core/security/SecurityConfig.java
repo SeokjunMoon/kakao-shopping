@@ -81,18 +81,6 @@ public class SecurityConfig {
                     createErrorResponse(response, new PermissionDeniedException("권한이 없습니다."));
                 })
 
-                .and()
-                .logout().logoutSuccessUrl("/")
-
-                .and()
-                .oauth2Login()
-
-                .successHandler()
-
-                .userInfoEndpoint()
-
-                .userService()
-
                 .and().build();
     }
 
