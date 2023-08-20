@@ -73,7 +73,7 @@ public class CartRepositoryTest {
         Long userId = userDetails.getUserAccount().getId();
 
         // when
-        List<Cart> savedCart = cartRepository.findByUserIdOrderByOptionIdAsc(userId).orElseThrow();
+        List<Cart> savedCart = cartRepository.findAllByUserAccountId(userId).orElseThrow();
 
         // then
         assertThat(savedCart.get(0))
@@ -87,7 +87,7 @@ public class CartRepositoryTest {
     public void update_test() {
         // given
         Long userId = userDetails.getUserAccount().getId();
-        List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(userId).orElseThrow();
+        List<Cart> carts = cartRepository.findAllByUserAccountId(userId).orElseThrow();
         Cart cart = carts.get(0);
 
         // when
@@ -106,7 +106,7 @@ public class CartRepositoryTest {
         // given
         long previous_count = cartRepository.count();
         Long userId = userDetails.getUserAccount().getId();
-        List<Cart> carts = cartRepository.findByUserIdOrderByOptionIdAsc(userId).orElseThrow();
+        List<Cart> carts = cartRepository.findAllByUserAccountId(userId).orElseThrow();
         Cart cart = carts.get(0);
 
         // when
