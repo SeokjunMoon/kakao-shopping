@@ -63,4 +63,9 @@ public class UserAccountService implements UserDetailsService {
                 .birthdate(request.birthdate())
                 .build();
     }
+
+    public UserAccount findByEmailAndProvider(String email, String provider) {
+        return userAccountRepository.findByEmailAndProvider(email, provider)
+                .orElseThrow(() -> new BadRequestException("해당 유저를 찾을 수 없습니다."));
+    }
 }

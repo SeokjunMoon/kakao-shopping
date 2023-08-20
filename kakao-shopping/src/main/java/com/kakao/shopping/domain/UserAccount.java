@@ -21,6 +21,9 @@ public class UserAccount {
     @Column(nullable = false, length = 45)
     private String name;
 
+    @Column(nullable = false)
+    private String provider;
+
     @Column(nullable = false, length = 100, unique = true)
     private String email;
 
@@ -44,9 +47,10 @@ public class UserAccount {
     }
 
     @Builder
-    public UserAccount(Long id, String name, String email, String password, LocalDate birthdate, String roles) {
+    public UserAccount(Long id, String name, String provider, String email, String password, LocalDate birthdate, String roles) {
         this.id = id;
         this.name = name;
+        this.provider = (provider == null? "EMAIL" : provider);
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
