@@ -1,8 +1,10 @@
 package com.kakao.shopping.dto.product.request;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public record ProductInsertRequest(
+        @NotNull(message = "상품명을 입력해주세요.")
         String name,
         String description,
         String image,

@@ -3,7 +3,6 @@ package com.kakao.shopping.service;
 import com.kakao.shopping._core.errors.exception.BadRequestException;
 import com.kakao.shopping._core.security.CustomUserDetails;
 import com.kakao.shopping._core.security.JwtTokenProvider;
-import com.kakao.shopping._core.utils.FormatChecker;
 import com.kakao.shopping.domain.UserAccount;
 import com.kakao.shopping.dto.user.UserLoginRequest;
 import com.kakao.shopping.dto.user.UserRegisterRequest;
@@ -30,9 +29,6 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public UserAccount register(UserRegisterRequest request) {
-        FormatChecker formatChecker = new FormatChecker(request);
-        formatChecker.execute();
-
         try {
             return userAccountRepository.save(toEntity(request));
         }
@@ -42,9 +38,6 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public String login(UserLoginRequest request) {
-        FormatChecker formatChecker = new FormatChecker(request);
-        formatChecker.execute();
-
         UserAccount userAccount = userAccountRepository.findByEmail(request.email())
                 .orElseThrow(() -> new BadRequestException("등록되지 않은 이메일 입니다."));
 
